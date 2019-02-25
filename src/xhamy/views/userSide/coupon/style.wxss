@@ -1,0 +1,6 @@
+#coupon {
+  padding: 20px;
+}
+#coupon .couponIcon {
+  width: 50%;
+}

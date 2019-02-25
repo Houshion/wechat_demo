@@ -1,0 +1,406 @@
+.loading1 {
+  margin: auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 5px solid #BEBEBE;
+  border-left: 5px solid #498aca;
+  animation: load1 1s linear infinite;
+  -moz-animation: load1 1s linear infinite;
+  -webkit-animation: load1 1s linear infinite;
+  -o-animation: load1 1s linear infinite;
+  .routate1()
+}
+.routate1{
+  
+}
+@-webkit-keyframes load1 {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes load1 {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-o-keyframes load1 {
+  from {
+    -o-transform: rotate(0deg);
+  }
+
+  to {
+    -o-transform: rotate(360deg);
+  }
+}
+
+.loading2 {
+  /*固定loading*/
+  position: relative;
+  /*垂直水平居中*/
+  width: 40px;
+  height: 40px;
+  border: 2px solid;
+  border-color: #333 #333 transparent;
+  border-radius: 50%;
+  box-sizing: border-box;
+  /*动画时间1s，线性变化，无限循环*/
+  animation: loading2 1s linear infinite;
+}
+
+@keyframes loading2 {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/**
+  * 使用方法
+  *  <div class="loading loadingN">
+  *    <span></span>
+  *    <span></span>
+  *    <span></span>
+  *    <span></span>
+  *    <span></span>
+  *  </div>
+  */
+
+.loading {
+  width: 150px;
+  height: 15px;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+
+.loading span:last-child {
+  margin-right: 0px;
+}
+
+.loading span:nth-child(1) {
+  -webkit-animation-delay: 0.13s;
+}
+
+.loading span:nth-child(2) {
+  -webkit-animation-delay: 0.26s;
+}
+
+.loading span:nth-child(3) {
+  -webkit-animation-delay: 0.39s;
+}
+
+.loading span:nth-child(4) {
+  -webkit-animation-delay: 0.52s;
+}
+
+.loading span:nth-child(5) {
+  -webkit-animation-delay: 0.65s;
+}
+
+/* loading3 */
+
+.loading3 span {
+  display: inline-block;
+  width: 15px;
+  height: 100%;
+  margin-right: 5px;
+  border-radius: 50%;
+  background: lightgreen;
+  -webkit-animation: load3 1.04s ease infinite;
+}
+
+@-webkit-keyframes load3 {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* loading4 */
+.loading4 {
+  width: 80px;
+  height: 40px;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+
+.loading4 span {
+  display: inline-block;
+  width: 8px;
+  height: 100%;
+  border-radius: 4px;
+  background: lightgreen;
+  -webkit-animation: load4 1s ease infinite;
+  animation: load4 1s ease infinite;
+}
+
+@-webkit-keyframes load4 {
+
+  0%,
+  100% {
+    height: 40px;
+    background: lightgreen;
+  }
+
+  50% {
+    height: 70px;
+    margin: -15px 0;
+    background: lightblue;
+  }
+}
+
+/* loading5 */
+
+.loading5 span {
+  display: inline-block;
+  width: 15px;
+  height: 100%;
+  margin-right: 5px;
+  background: lightgreen;
+  -webkit-transform-origin: right bottom;
+  -webkit-animation: load5 1s ease infinite;
+}
+
+@-webkit-keyframes load5 {
+  0% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    -webkit-transform: rotate(90deg) scale(.3);
+  }
+}
+
+/* loading6 */
+
+.loading6 span {
+  display: inline-block;
+  width: 8px;
+  height: 100%;
+  border-radius: 4px;
+  background: lightgreen;
+  -webkit-animation: load6 1.04s ease infinite;
+}
+
+@-webkit-keyframes load6 {
+
+  0%,
+  100% {
+    height: 40px;
+    background: lightgreen;
+  }
+
+  50% {
+    height: 60px;
+    margin-top: -20px;
+    background: lightblue;
+  }
+}
+
+/* loading7 */
+/**
+  * 使用方法
+  *  <div class="loading7">
+  *    <span></span>
+  *    <span></span>
+  *    <span></span>
+  *    <span></span>
+  *    <span></span>
+  *    <span></span>
+  *    <span></span>
+  *    <span></span>
+  *  </div>
+  */
+
+.loading7 {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+
+.loading7 span {
+  display: inline-block;
+  width: 30px;
+  height: 10px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  background: lightgreen;
+  position: absolute;
+  -webkit-animation: load7 1.04s ease infinite;
+}
+
+@-webkit-keyframes load7 {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.2;
+  }
+}
+
+.loading7 span:nth-child(1) {
+  left: 0;
+  top: 50%;
+  margin-top: -5px;
+  -webkit-animation-delay: 0.13s;
+}
+
+.loading7 span:nth-child(2) {
+  left: 10px;
+  top: 20px;
+  -webkit-transform: rotate(45deg);
+  -webkit-animation-delay: 0.26s;
+}
+
+.loading7 span:nth-child(3) {
+  left: 50%;
+  top: 10px;
+  margin-left: -15px;
+  -webkit-transform: rotate(90deg);
+  -webkit-animation-delay: 0.39s;
+}
+
+.loading7 span:nth-child(4) {
+  top: 20px;
+  right: 10px;
+  -webkit-transform: rotate(135deg);
+  -webkit-animation-delay: 0.52s;
+}
+
+.loading7 span:nth-child(5) {
+  right: 0;
+  top: 50%;
+  margin-top: -5px;
+  -webkit-transform: rotate(180deg);
+  -webkit-animation-delay: 0.65s;
+}
+
+.loading7 span:nth-child(6) {
+  right: 10px;
+  bottom: 20px;
+  -webkit-transform: rotate(225deg);
+  -webkit-animation-delay: 0.78s;
+}
+
+.loading7 span:nth-child(7) {
+  bottom: 10px;
+  left: 50%;
+  margin-left: -15px;
+  -webkit-transform: rotate(270deg);
+  -webkit-animation-delay: 0.91s;
+}
+
+.loading7 span:nth-child(8) {
+  bottom: 20px;
+  left: 10px;
+  -webkit-transform: rotate(315deg);
+  -webkit-animation-delay: 1.04s;
+}
+
+/* loading8 */
+/**
+  * 使用方法
+  *  <div class="loading8">
+  *    <div><span></span></div>
+  *    <div><span></span></div>
+  *    <div><span></span></div>
+  *    <div><span></span></div>
+  *  </div>
+  */
+
+.loading8 {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  margin-top: 100px;
+  position: relative;
+}
+
+.loading8 div {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  -webkit-animation: load8 2.08s linear infinite;
+}
+
+.loading8 div span {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: lightgreen;
+  position: absolute;
+  left: 50%;
+  margin-top: -10px;
+  margin-left: -10px;
+}
+
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  10% {
+    -webkit-transform: rotate(45deg);
+  }
+
+  50% {
+    opacity: 1;
+    -webkit-transform: rotate(160deg);
+  }
+
+  62% {
+    opacity: 0;
+  }
+
+  65% {
+    opacity: 0;
+    -webkit-transform: rotate(200deg);
+  }
+
+  90% {
+    -webkit-transform: rotate(340deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+
+}
+
+.loading8 div:nth-child(1) {
+  -webkit-animation-delay: 0.2s;
+}
+
+.loading8 div:nth-child(2) {
+  -webkit-animation-delay: 0.4s;
+}
+
+.loading8 div:nth-child(3) {
+  -webkit-animation-delay: 0.6s;
+}
+
+.loading8 div:nth-child(4) {
+  -webkit-animation-delay: 0.8s;
+}

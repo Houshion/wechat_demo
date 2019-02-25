@@ -1,0 +1,46 @@
+#indexMap {
+  height: 100%;
+}
+
+.tool {
+  width: 100%;
+  z-index: 1;
+  bottom: 0;
+
+  .btns {
+    position: absolute;
+    width: 100%;
+    bottom: 230px;
+    align-items: flex-end;
+
+    img {
+      width: 50px;
+    }
+  }
+
+  .scan {
+    .bac {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      z-index: 2;
+      max-height: 240px;
+
+      img {
+        width: 100%;
+        display: block;
+      }
+    }
+
+    .scanBtn {
+      position: absolute;
+      width: 100%;
+      z-index: 3;
+      bottom: 40px;
+
+      img {
+        width: 160px;
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+#confirmOrder .tcMsg .title {
+  font-size: 1rem !important;
+}
+#confirmOrder .tcMsg .title img {
+  max-height: 18px;
+}
+#confirmOrder .tcMsg span.price {
+  font-size: 2rem !important;
+}
+#confirmOrder .coupon .img img {
+  display: block;
+  width: 20px;
+  height: 13.5px;
+}
+#confirmOrder .payWay .iconImg img {
+  display: block;
+  width: 20px;
+}
+#confirmOrder .payWay .payIcon img {
+  width: 25px;
+}
+#confirmOrder .payWay .radioIcon {
+  width: 20px;
+}

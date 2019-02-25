@@ -1,0 +1,8 @@
+#reporting .scanCode .van-cell {
+  padding: 0;
+}
+#reporting .scanCode img {
+  width: 24px;
+  height: 24px;
+  display: block;
+}

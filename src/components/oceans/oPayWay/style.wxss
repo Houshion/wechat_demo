@@ -1,0 +1,10 @@
+#oPayWay .iconImg img {
+  display: block;
+  width: 20px;
+}
+#oPayWay .payIcon img {
+  width: 25px;
+}
+#oPayWay .radioIcon {
+  width: 20px;
+}

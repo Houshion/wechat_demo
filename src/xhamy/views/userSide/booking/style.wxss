@@ -1,0 +1,6 @@
+.deviceMsg .icon .iconImg {
+  max-width: 14px;
+  max-height: 18px;
+  display: block;
+  margin-right: 5px;
+}
