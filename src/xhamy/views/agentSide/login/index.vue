@@ -1,11 +1,12 @@
 <template>
   <div id="login">
-    <o-login :logo="logo" :boxMsg="boxMsg" @login="login"></o-login>
+    <m-login :logo="logo" :boxMsg="boxMsg" @login="login"></m-login>
+    <!-- <o-login :logo="logo" :boxMsg="boxMsg" @login="login"></o-login> -->
   </div>
 </template>
 
 <script>
-import oLogin from "@/components/oceans/oLogin";
+import mLogin from "@/components/oceans/oLogin/mLogin.vue";
 export default {
   name: "login",
   data() {
@@ -13,22 +14,17 @@ export default {
       logo: require("@/xhamy/img/logo.jpg"),
       boxMsg: {
         username: {
-          // placeholder: "请输入用户名",
-          error: "用户名错误",
-          icon: null,
-          label: null,
+          placeholder: "请输入用户名",
+          label: "null",
           value: null
         },
         password: {
           placeholder: "请输入密码",
-          error: "密码错误",
-          icon: null,
-          label: null,
+          label: "null",
           value: null
         },
         sms: {
           placeholder: "请输入短信验证码",
-          icon: null,
           label: null,
           value: null
         }
@@ -37,7 +33,7 @@ export default {
   },
 
   components: {
-    oLogin
+    mLogin
   },
 
   created() {
@@ -48,11 +44,9 @@ export default {
     const _this = this;
   },
   methods: {
-    login(val) {
-      console.log(val);
-    }
+    login(val) {}
   }
 };
 </script>
-<style lang='less' scoped>
+<style lang='less'>
 </style>

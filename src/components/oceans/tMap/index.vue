@@ -21,7 +21,7 @@ export default {
       // 地图
       mapView: "",
       // 标注点数组
-      markersArray: [],
+      markersArray: []
       // 中心点图标
       // locationImg: require("./img/location.png")
     };
@@ -95,6 +95,7 @@ export default {
     },
     // 清除已有的地图标记
     clearOverlays() {
+      console.log(123);
       if (this.markersArray) {
         this.markersArray.map(item => {
           item.setMap(null);

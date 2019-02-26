@@ -2,44 +2,29 @@
   <div id="oLogin">
     <div class="headerImg pd-tb-35">
       <div class="img box mg-auto bfff">
-        <img src="@/xhamy/img/logo.jpg" alt>
+        <img :src="logo" alt>
       </div>
     </div>
     <div class="loginBox pd-15">
-      <van-cell-group>
-        <van-field
-          clearable
-          v-model="boxMsg.username.value"
-          placeholder="请输入用户名"
-          :label="boxMsg.username.label"
-          :error-message="error.user"
-        >
-          <van-icon name="user-o" slot="left-icon" v-if="boxMsg.username.icon"/>
-        </van-field>
-        <van-field
-          v-model="boxMsg.sms.value"
-          left
-          clearable
-          placeholder="请输入短信验证码"
-          :label="boxMsg.sms.label"
-        >
-          <van-icon :name="boxMsg.sms.icon" slot="left-icon" v-if="boxMsg.sms.icon"/>
-          <!-- <van-button slot="button" size="small" type="primary">发送验证码</van-button> -->
-          <o-button slot="button" @btnClick="sendCode">发送验证码</o-button>
-        </van-field>
-        <van-field
-          clearable
-          :type="passShow?'text':'password'"
-          v-model="boxMsg.password.value"
-          placeholder="请输入密码"
-          :label="boxMsg.password.label"
-          :error-message="error.pass"
-          @click-right-icon="passShow = !passShow;"
-        >
-          <van-icon name="eye-o" slot="right-icon" v-if="passShow"/>
-          <van-icon name="closed-eye" slot="right-icon" v-else/>
-        </van-field>
-      </van-cell-group>
+      <mu-text-field
+        v-model="boxMsg.username.value"
+        :label="boxMsg.username.placeholder"
+        label-float
+        :help-text="error.user"
+        icon="account_circle"
+      ></mu-text-field>
+      <br>
+      <mu-text-field
+        :type="passShow?'text':'password'"
+        v-model="boxMsg.password.value"
+        :label="boxMsg.password.placeholder"
+        :action-click="() => (passShow = !passShow)"
+        :action-icon="passShow?'visibility':'visibility_off'"
+        label-float
+        :error-text="error.pass"
+        icon="locked"
+      ></mu-text-field>
+      <br>
     </div>
     <o-button class="wd-90 mg-auto mg-tb-30" @btnClick="login">登录</o-button>
   </div>
@@ -80,6 +65,10 @@ export default {
           value: null
         }
       })
+    },
+    logo: {
+      type: String,
+      defalut: require("@/assets/logo.png")
     }
   },
   data() {
@@ -110,7 +99,7 @@ export default {
   }
 };
 </script>
-<style lang='less' scoped>
+<style lang='less'>
 .headerImg {
   .img {
     width: 100px;
@@ -125,12 +114,23 @@ export default {
 }
 .loginBox {
   border-radius: 10px;
-  .van-cell {
-    background: #ebedf0;
-    &:not(:last-child)::after {
-      border-color: #999;
-      right: 15px;
+  .mu-input.has-icon {
+    padding-left: 36px;
+    width: 95%;
+    font-size: 24px !important;
+    i {
+      left: 0;
+      font-size: 24px !important;
     }
+    .mu-input-content {
+      width: 300px;
+    }
+  }
+  .mu-input-icon {
+    left: 0px;
+  }
+  i.material-icons {
+    font-size: 24px !important;
   }
 }
 </style>

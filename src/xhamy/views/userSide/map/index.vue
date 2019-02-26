@@ -1,6 +1,6 @@
 <template>
   <div id="indexMap">
-    <t-map :marker="mapMarker" :markerIcon="markerIcon">
+    <t-map :marker="mapMarker" :markerIcon="markerIcon" ref="oMap">
       <div class="po_ab tool">
         <div class="btns flex flexBetween">
           <div class="left">
