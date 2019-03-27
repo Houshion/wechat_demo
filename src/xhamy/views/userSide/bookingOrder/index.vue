@@ -9,7 +9,7 @@
         <div class="tal dateTime">{{item.dateTime}}</div>
         <div slot="right-icon">
           <o-button v-if="item.state==0">取消预约</o-button>
-          <o-button v-else color="#fff">已使用</o-button>
+          <o-button v-else color="cmain">已使用</o-button>
         </div>
       </van-cell>
     </div>

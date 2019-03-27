@@ -1,7 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
 
-const _Url = ''
+const _Url = 'http://bjxhamy.app.xiaozhuschool.com' //请求地址
 
 function getUrl(url) {
   /* 判断传入的url路径是否是http开头 */
@@ -31,6 +31,7 @@ const Http = {
   post: (url, query) => new Promise((resolve, reject) => {
     /* new Promise 是为进行在vue store里面进行异步传值 */
     var path = getUrl(url)
+    query.token = window.localStorage.getItem("token")
     /* post请求 */
     axios({
       url: path,
@@ -41,7 +42,7 @@ const Http = {
       }
     }).then((res1, error) => {
       if (res1) {
-        resolve(res1)
+        resolve(res1.data)
       } else {
         reject(error)
       }

@@ -2,9 +2,10 @@
   <div id="oCoupon">
     <div
       class="coupon"
-      :class="item.state==0 ?'coupon-diabled':''"
-      v-for="item in list"
+      :class="item.state==0 ?'':'coupon-diabled'"
+      v-for="(item,index) in list"
       :key="item.id"
+      @click="select(index)"
     >
       <div class="coupon-left">
         <div class="coupon-inner">
@@ -23,6 +24,9 @@
           <div class="coupon-time">
             <slot></slot>
             <div class="state">{{item.state==0?"未使用":"已使用"}}</div>
+            <div class="select" v-if="item.id === selectId">
+              <img src="../../../xhamy/img/couponSelect.png" alt="">
+            </div>
           </div>
           <i class="coupon-circle top"></i>
           <i class="coupon-circle bottom"></i>
@@ -40,19 +44,28 @@ export default {
     list: Array
   },
   data() {
-    return {};
+    const _this = this
+    return {
+      selectId: this.$route.query.type ? this.tool.couponMsg ? this.tool.couponMsg.id : null : null
+    };
   },
 
   components: {},
 
   created() {
     const _this = this;
+    console.log(_this.selectId);
+
   },
 
   mounted() {
     const _this = this;
   },
-  methods: {}
+  methods: {
+    select(id) {
+      this.$emit("getCoupon", id)
+    }
+  }
 };
 </script>
 <style lang='less' scoped>

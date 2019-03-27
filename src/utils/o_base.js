@@ -1,4 +1,7 @@
 import axios from "./axios";
+import wx from "weixin-js-sdk";
+import { oToast } from '@/components/oceans/oToast/index.js'
+// import "./jsSHA.js";
 export default {
   /******************************* 跳转 **************************/
   goTo(to, query) {
@@ -9,35 +12,97 @@ export default {
     })
   },
   /******************************* 微信信息 **************************/
-  getWx(jsApiList, callback) {
+  getWx(callback, jsApiList) {
     const _this = this;
-    axios.post("Wxsite/Device/getTicket", {}).then(res => {
-      let timestamp = (new Date().getTime() / 1000).toFixed(0);
-      let noncestr = Math.random()
-        .toString(36)
-        .substr(2);
-      // let ticket = wx_js(res.data.data.result.ticket, timestamp, noncestr);
-      let e = decodeURIComponent(
-          "jsapi_ticket=" +
-          res.data.data.result.ticket +
-          "&noncestr=" +
-          noncestr +
-          "&timestamp=" +
-          timestamp +
-          "&url=" +
-          location.href.split("#")[0]
-        ),
-        s = new jsSHA(e, "TEXT"),
-        ticket = s.getHash("SHA-1", "HEX");
-      wx.config({
-        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端//alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-        appId: res.data.data.appid, // 必填，公众号的唯一标识
-        timestamp: timestamp, // 必填，生成签名的时间戳
-        nonceStr: noncestr, // 必填，生成签名的随机串
-        signature: ticket, // 必填，签名，见附录1
-        jsApiList: jsApiList // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-      });
-      return callback ? callback() : ""
+    axios.post("/Wxsite/Device/api", {
+      api_name: "get_ticket",
+      token: window.localStorage.getItem("token"),
+      url: location.href
+    }).then(res => {
+      if (res.code == 1) {
+        let appId, timestamp, nonceStr, signature;
+        if (!res.data.signature) {
+          timestamp = (new Date().getTime() / 1000).toFixed(0);
+          let noncestr = Math.random()
+            .toString(36)
+            .substr(2);
+          // let ticket = wx_js(res.data.data.result.ticket, timestamp, noncestr);
+          let e = decodeURIComponent(
+            "jsapi_ticket=" +
+            res.data.ticket +
+            "&noncestr=" +
+            noncestr +
+            "&timestamp=" +
+            timestamp +
+            "&url=" +
+            location.href.split("#")[0]
+          ),
+            s = new jsSHA(e, "TEXT"),
+            ticket = s.getHash("SHA-1", "HEX");
+          // ticket = res.data.data.ticket;
+          console.log(ticket)
+          console.log(res.data.ticket)
+          // config信息
+          appId = "wx6a088195d7884586";
+          nonceStr = noncestr;
+          signature = ticket
+        } else {
+          console.log(res.data.nonceStr)
+          appId = res.data.appId;
+          nonceStr = res.data.nonceStr;
+          signature = res.data.signature;
+          timestamp = res.data.timestamp;
+        }
+        wx.config({
+          debug: false, // 开启调试模式,调用的所有api的返回值会在客户端//alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          appId: appId, // 必填，公众号的唯一标识
+          timestamp: timestamp, // 必填，生成签名的时间戳
+          nonceStr: nonceStr, // 必填，生成签名的随机串
+          signature: signature, // 必填，签名，见附录1
+          jsApiList: jsApiList ? jsApiList : [
+            'updateAppMessageShareData',
+            'updateTimelineShareData',
+            'onMenuShareTimeline',//（即将废弃）
+            'onMenuShareAppMessage',//（即将废弃）
+            'onMenuShareQQ',//（即将废弃）
+            'onMenuShareWeibo',
+            'onMenuShareQZone',
+            'startRecord',
+            'stopRecord',
+            'onVoiceRecordEnd',
+            'playVoice',
+            'pauseVoice',
+            'stopVoice',
+            'onVoicePlayEnd',
+            'uploadVoice',
+            'downloadVoice',
+            'chooseImage',
+            'previewImage',
+            'uploadImage',
+            'downloadImage',
+            'translateVoice',
+            'getNetworkType',
+            'openLocation',
+            'getLocation',
+            'hideOptionMenu',
+            'showOptionMenu',
+            'hideMenuItems',
+            'showMenuItems',
+            'hideAllNonBaseMenuItem',
+            'showAllNonBaseMenuItem',
+            'closeWindow',
+            'scanQRCode',
+            'chooseWXPay',
+            'openProductSpecificView',
+            'addCard',
+            'chooseCard',
+            'openCard',
+          ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+        return callback ? callback() : ""
+      } else {
+        oToast(res.msg)
+      }
     });
   },
   callpay(jsApiParameters, callback) {
@@ -63,7 +128,7 @@ export default {
       );
     }
   },
-  getTmapLocation() {
+  getTmapLocation(call) {
     const _this = this;
     wx.ready(function () {
       wx.getLocation({
@@ -73,10 +138,10 @@ export default {
           var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
           var speed = res.speed; // 速度，以米/每秒计
           var accuracy = res.accuracy; // 位置精度
-          return {
+          call({
             lat: latitude,
             lng: longitude,
-          }
+          })
         }
       });
     })
@@ -201,5 +266,89 @@ export default {
   // 删除cookie
   removeCookie(name) {
     setCookie(name, 1, -1);
+  },
+
+  /****************************** 格式化时间 ******************************/
+  timeStr(time, ff) {
+    if (Number(time).toString().length == 10) {
+      time = Number(time + "000")
+    }
+    time = new Date(time);
+    var year = time.getFullYear();
+    var month =
+      time.getMonth() + 1 < 10 ?
+        "0" + (time.getMonth() + 1) :
+        time.getMonth() + 1;
+    var date = time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
+    var hour = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
+    var minute =
+      time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
+    var second =
+      time.getSeconds() < 10 ? "0" + time.getSeconds() : time.getSeconds();
+    if (ff == "Y-m-d") {
+      return year + "-" + month + "-" + date;
+    } else if (ff == "Y-m-d H:i:s") {
+      return (
+        year +
+        "-" +
+        month +
+        "-" +
+        date +
+        " " +
+        hour +
+        ":" +
+        minute +
+        ":" +
+        second
+      );
+    } else if (ff == "Y-m-d H:i") {
+      return year + "-" + month + "-" + date + " " + hour + ":" + minute;
+    } else if (ff == "Y.m.d") {
+      return year + "." + month + "." + date;
+    } else if (ff == "Y.m.d H:i:s") {
+      return (
+        year +
+        "." +
+        month +
+        "." +
+        date +
+        " " +
+        hour +
+        ":" +
+        minute +
+        ":" +
+        second
+      );
+    } else if (ff == "Y.m.d H:i") {
+      return year + "." + month + "." + date + " " + hour + ":" + minute;
+    }
+  },
+
+  /****************************** webSocket ******************************/
+  socket(data, cb) {
+    if ("WebSocket" in window) {
+      // var ws = new WebSocket("ws://120.77.72.190:9999");
+      var ws = new WebSocket("ws://120.77.72.190:8082");
+      ws.onopen = function () {
+        ws.send(data);
+      };
+      ws.onmessage = function (res) {
+        cb({ code: 1, data: res.data });
+        ws.close() // 获取到数据后，关闭socket
+      };
+      ws.onclose = function (close) {
+        // alert(JSON.stringify(close));
+        console.log(JSON.stringify(close));
+        // cb({ code: 3, msg: "连接断开", data: close });
+      };
+      ws.error = function (err) {
+        // alert(JSON.stringify(err));
+        console.log(JSON.stringify(err));
+        // cb({ code: 4, msg: "连接失败", data: err });
+      };
+    } else {
+      console.log(JSON.stringify(err));
+      // cb({ code: 2, msg: "当前浏览器不支持WebSocket!" });
+    }
   },
 }

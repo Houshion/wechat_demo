@@ -3,7 +3,7 @@
     <div class="header">
       <img :src="backImg" class="wd-100">
       <div class="dataInfo">
-        <img :src="headImg" alt>
+        <img :src="headImg" alt="">
         <slot name="info"></slot>
       </div>
     </div>
@@ -58,6 +58,11 @@ export default {
   position: absolute;
   top: 20px;
   width: 100%;
+  img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  }
 }
 .iconImg {
   max-width: 20px;

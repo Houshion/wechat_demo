@@ -8,19 +8,23 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "vue": "^2.6.6",
+    "vue": "^2.6.10",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
-    "@vant/icons": "^1.0.9",
+    "@vant/icons": "^1.1.4",
     "@vue/cli-plugin-babel": "^3.4.0",
     "@vue/cli-service": "^3.4.0",
-    "less": "^3.0.4",
+    "babel-plugin-import": "^1.11.0",
+    "good-storage": "^1.1.0",
+    "js-cookie": "^2.2.0",
+    "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "muse-ui": "^3.0.2",
-    "vant": "^1.6.6",
-    "vue-template-compiler": "^2.5.21"
+    "vant": "^1.6.11",
+    "vue-template-compiler": "^2.6.10",
+    "weixin-js-sdk": "^1.4.0-test"
   },
   "postcss": {
     "plugins": {

@@ -7,7 +7,7 @@ import {
   removeToken,
   removeUserInfo,
 }
-from '@/utils/cache'
+  from '@/utils/cache'
 
 //登录相关
 export const loginWechatAuth = function ({
@@ -18,7 +18,7 @@ export const loginWechatAuth = function ({
     code: query,
   }
   return new Promise(((resolve, reject) => {
-    axios.get("http://hzchuangd.app.xiaozhuschool.com/api/public/wx_oauth", {
+    axios.post("http://hzchuangd.app.xiaozhuschool.com/api/public/wx_oauth", {
       params: data
     }).then((res1, error) => {
       if (res1) {

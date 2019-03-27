@@ -1,8 +1,8 @@
 <template>
-  <div id="countDown">
+  <div id="countDown" class="box">
     <div class="circle-border">
       <div class="circleContent flex flexCenter cfff">
-        <div class="wd-100 font18">倒计时</div>
+        <div class="wd-100 font18">{{title}}</div>
         <div class="wd-100 font24 fontb">{{cTime|countTime}}</div>
       </div>
     </div>
@@ -15,7 +15,12 @@ export default {
     time: {
       type: Number,
       default: 0
-    }
+    },
+    title: {
+      type: String,
+      default: "倒计时"
+    },
+    to: String
   },
   name: "countDown",
   data() {
@@ -47,11 +52,12 @@ export default {
         if (_this.cTime > 1) {
           _this.cTime = _this.cTime - 1;
         } else {
-          _this.cTime = 0;
           clearInterval(_this.interval);
+          _this.cTime = 0;
+          _this.$router.replace({ name: this.to })
         }
       }, 1000);
-    }
+    },
   }
 };
 </script>
@@ -62,6 +68,7 @@ export default {
     height: 162px;
     border: 1px solid red;
     border-radius: 50%;
+    margin: auto;
     .circleContent {
       background: red;
       width: 150px;

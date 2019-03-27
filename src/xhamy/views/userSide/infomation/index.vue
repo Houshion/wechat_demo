@@ -1,7 +1,7 @@
 <template>
   <div id="infomation" class="pd-15">
     <div class="boxShadow radius10">
-      <o-swipe-cell @onClose="close" @detail="detail"></o-swipe-cell>
+      <o-swipe-cell class="radius10" @onClose="close" @detail="detail"></o-swipe-cell>
     </div>
   </div>
 </template>

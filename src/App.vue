@@ -12,6 +12,7 @@
   text-align: center;
   color: #2c3e50;
   min-height: 100%;
+  background: #ffffff;
 }
 #nav {
   padding: 30px;

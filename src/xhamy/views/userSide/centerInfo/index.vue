@@ -11,16 +11,15 @@
 </template>
 
 <script>
-import oCenter from "@/components/oceans/oPersonCenter";
 export default {
   name: "centerInfo",
   data() {
     return {
       // backImg: require("@/xhamy/img/centerBac.png"),
       dataInfo: {
-        img: require("@/xhamy/img/person.png"),
-        name: "Ocean",
-        phone: "18820129123"
+        img: '',
+        name: '',
+        phone: ''
       },
       listData: [
         [
@@ -70,16 +69,32 @@ export default {
     };
   },
 
-  components: {
-    oCenter
-  },
-
   created() {
     const _this = this;
+    this.init();
   },
 
   mounted() {
     const _this = this;
+  },
+
+  methods: {
+    init() {
+      const _this = this;
+      this.axios.post("/wxsite/user/api", { api_name: "user_info" }).then(res => {
+        if (res.code == 1) {
+          console.log(1);
+          _this.tool.userMsg = res.data
+          _this.dataInfo = {
+            img: res.data.head_img,
+            name: res.data.nickname,
+            phone: res.data.mobile
+          };
+        } else {
+          _thsi.$toast(res.msg)
+        }
+      })
+    }
   }
 };
 </script>

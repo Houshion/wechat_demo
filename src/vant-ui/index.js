@@ -16,7 +16,7 @@ import {
   Field,
   Uploader
 }
-from 'vant';
+  from 'vant';
 import 'vant/lib/index.css';
 Vue
   .use(Popup)

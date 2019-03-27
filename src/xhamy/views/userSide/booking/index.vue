@@ -1,12 +1,12 @@
 <template>
   <div id="booking" class="pd-15 bfff">
     <div class="deviceMsg boxShadow radius10 mg-b-15 pd-15 tal">
-      <div class="cbbb">设备编号：2019010151452</div>
+      <div class="cbbb">设备编号：{{deviceMsg.macno}}</div>
       <div class="pd-tb-15 flex flexStart">
         <div class="icon">
           <img src="@/xhamy/img/i_location.png" class="iconImg">
         </div>
-        <div>南城区高盛科技园</div>
+        <div>{{deviceMsg.address}}</div>
       </div>
       <div class="flex flexStart">
         <div class="icon">
@@ -14,7 +14,10 @@
         </div>
         <div @click="timePick=true">
           预计到达时间
-          <span v-if="arriveTime" class="cbbb beee pd-lr-10 mg-l-5 radius5">{{arriveTime}}</span>
+          <span
+            v-if="arriveTime"
+            class="cbbb beee pd-lr-10 mg-l-5 radius5"
+          >{{form.minute}}min ></span>
         </div>
         <van-popup v-model="timePick" position="bottom">
           <van-picker
@@ -34,15 +37,13 @@
         ></o-picker>-->
       </div>
     </div>
-
-    <o-seat :col="8" :seatData="seatData" class="boxShadow radius10"></o-seat>
-    <mu-button color="#c2a466" class="wd-80 radius10 mg-t-50">确认预约</mu-button>
+    <o-seat :col="8" :seatData="seatData" class="boxShadow radius10" @getCall="getId"></o-seat>
+    <o-button class="wd-80 radius10 mg-t-50" @btnClick="submitBooking">确认预约</o-button>
   </div>
 </template>
 
 <script>
 import * as script from "./script";
-import { Button } from "vant";
 import oPicker from "@/components/oceans/oPicker";
 import oSeat from "@/components/oceans/oPickSeat";
 export default {
@@ -52,9 +53,15 @@ export default {
       // 座位数据
       seatData: script.seatData,
       // picker选择数据
-      pickData: script.time,
+      pickData: this.strTime(script.time),
       timePick: false,
-      arriveTime: null
+      arriveTime: '5',
+      deviceMsg: this.tool.deviceMsg,
+      form: {
+        token: this.tool.token,
+        minute: '5',
+        device_id: 0
+      }
     };
   },
 
@@ -65,18 +72,58 @@ export default {
 
   created() {
     const _this = this;
+    _this.getList()
   },
 
   mounted() {
     const _this = this;
   },
+
   methods: {
+    strTime(res) {
+      let arr = new Array()
+      res.forEach(item => {
+        arr.push(item + "min")
+      });
+      return arr
+    },
     onConfirm(value, index) {
       this.timePick = false;
-      this.arriveTime = value + " >";
+      this.form.minute = script.time[index];
     },
-    pick(val) {
-      this.arriveTime = val + " >";
+    getList() {
+      const _this = this;
+      this.axios.post("/wxsite/auth/site", {
+        token: this.tool.token,
+        site_id: this.tool.deviceMsg.site_id
+      }).then(res => {
+        if (res.code == 1) {
+          // _this.seatData = res.data.list
+          // _this.seatData.forEach((item, index) => {
+          //   let select = Object.assign({}, item, {
+          //     selected: item.status == 1 ? false : true
+          //   });
+          //   _this.$set(_this.seatData, index, select);
+          // });
+          // _this.seatData = res.data.list
+        }
+      });
+    },
+    submitBooking() {
+      if (this.form.device_id == 0) {
+        return this.$toast("请选择设备")
+      }
+      this.axios.post("/wxsite/auth/subscribe", this.form).then(res => {
+        this.$toast(res.msg)
+        if (res.code == 1) {
+          setTimeout(() => {
+            WeixinJSBridge.call('closeWindow')
+          }, 2000);
+        }
+      });
+    },
+    getId(id) {
+      this.form.device_id = id
     }
   }
 };

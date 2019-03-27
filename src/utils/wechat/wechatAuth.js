@@ -12,7 +12,8 @@ class VueWechatAuthPlugin {
   constructor() {
     this.appid = null
     this.redirect_uri = null
-    this.scope = SCOPES[1]
+    // this.scope = SCOPES[1] // ['snsapi_base', 'snsapi_userinfo']
+    this.scope = 'snsapi_userinfo' // ['snsapi_base', 'snsapi_userinfo']
     this._code = null
     this._redirect_uri = null
   }
@@ -38,8 +39,8 @@ class VueWechatAuthPlugin {
   }
 
   set redirect_uri(redirect_uri) {
-    this._redirect_uri = encodeURIComponent(redirect_uri)
-    // this._redirect_uri = 'http://hzchuangd.app.xiaozhuschool.com/h5/dist/index.html#/index'
+    // this._redirect_uri = encodeURIComponent(redirect_uri)
+    this._redirect_uri = 'http://www.zjgxkl.com/h5/dist/index0.html'
   }
 
   get redirect_uri() {
@@ -75,21 +76,21 @@ class VueWechatAuthPlugin {
       this._code = parsedUrl.code
     } else {
       if (this.state === null) {
-        throw 'You did\'t set state'
+        throw '已经设置了state'
       }
       if (parsedUrl.state === this.state) {
         this.state = null
         this._code = parsedUrl.code
       } else {
         this.state = null
-        throw `Wrong state: ${parsedUrl.state}`
+        throw `错误的state: ${parsedUrl.state}`
       }
     }
   }
 
   get code() {
     if (this._code === null) {
-      throw 'Not get the code from wechat server!'
+      throw '无法获取code!'
     }
     // console.log(this)
     // console.log('this._code: ' + this._code)

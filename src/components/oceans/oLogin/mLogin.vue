@@ -27,6 +27,7 @@
       <br>
     </div>
     <o-button class="wd-90 mg-auto mg-tb-30" @btnClick="login">登录</o-button>
+    <o-bottom-nav></o-bottom-nav>
   </div>
 </template>
 

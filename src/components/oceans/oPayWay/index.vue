@@ -7,17 +7,17 @@
         </div>
         <div>
           需支付
-          <span class="cmoney font18">15</span>
+          <span class="cmoney font18">{{price}}</span>
           元
         </div>
       </van-cell>
-      <van-radio-group v-model="radio">
+      <van-radio-group v-model="radio" @change="changeWay">
         <van-cell-group>
           <van-cell
             :title="item.name"
             clickable
             @click="radio=index"
-            v-for="(item,index) in payWay"
+            v-for="(item,index) in payWay.way"
             :key="index"
           >
             <div slot="icon" class="iconImg box payIcon">
@@ -27,7 +27,7 @@
               <img
                 slot="icon"
                 slot-scope="props"
-                :src="props.checked ? icon.active : icon.normal"
+                :src="props.checked ? payWay.icon.active : payWay.icon.normal"
                 class="radioIcon"
               >
             </van-radio>
@@ -41,24 +41,35 @@
 <script>
 export default {
   name: "oPayWay",
+  props: {
+    price: {
+      type: Number,
+      default: 0
+    },
+    payWay: {
+      type: Object,
+      default: () => ({
+        way: [
+          {
+            name: "微信支付",
+            icon: require("@/xhamy/img/i_wxpay.png"),
+            status: true
+          },
+          {
+            name: "余额支付",
+            icon: require("@/xhamy/img/i_yuepay.png"),
+            status: false
+          }
+        ],
+        icon: {
+          normal: require("@/xhamy/img/unpick.png"),
+          active: require("@/xhamy/img/pick.png")
+        },
+      })
+    }
+  },
   data() {
     return {
-      payWay: [
-        {
-          name: "微信支付",
-          icon: require("@/xhamy/img/i_wxpay.png"),
-          status: true
-        },
-        {
-          name: "余额支付",
-          icon: require("@/xhamy/img/i_yuepay.png"),
-          status: false
-        }
-      ],
-      icon: {
-        normal: require("@/xhamy/img/unpick.png"),
-        active: require("@/xhamy/img/pick.png")
-      },
       radio: 0
     };
   },
@@ -67,12 +78,17 @@ export default {
 
   created() {
     const _this = this;
+    console.log(_this)
   },
 
   mounted() {
     const _this = this;
   },
-  methods: {}
+  methods: {
+    changeWay(val) {
+      this.$emit("getPayWay", val)
+    }
+  }
 };
 </script>
 <style lang='less' scoped>

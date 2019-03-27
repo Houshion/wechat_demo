@@ -11,64 +11,116 @@
         <span class="price">{{orderMsg.money | toFixed(2)}}</span>
       </div>
     </div>
-    <div class="coupon boxShadow radius5 mg-t-15 tal flex">
-      <van-cell title="优惠券" is-link>
+    <div class="couponCell boxShadow radius5 mg-t-15 tal flex">
+      <van-cell title="优惠券" is-link to="coupon?type=1">
+        <div v-if="couponMsg">-{{couponMsg.price}}</div>
         <div slot="icon" class="img box">
           <img src="@/xhamy/img/i_coupon.png" class="wd-100 mg-r-10">
         </div>
       </van-cell>
     </div>
     <div class="payWay boxShadow radius5 mg-t-15 tal">
-      <o-pay-way></o-pay-way>
+      <o-pay-way :price="total" :payWay="payWay" @getPayWay="getVal"></o-pay-way>
     </div>
-    <o-button class="wd-90 mg-auto">支付</o-button>
+    <o-button class="wd-90 mg-t-50" @btnClick="payNow">支付</o-button>
   </div>
 </template>
 
 <script>
-import oPayWay from "@/components/oceans/oPayWay";
 export default {
   name: "confirmOrder",
   data() {
     return {
-      orderMsg: {
-        name: "套餐一",
-        rule: "15元30分钟",
-        time: 30,
-        money: 15
-      },
-      payWay: [
-        {
-          name: "微信支付",
-          icon: require("@/xhamy/img/i_wxpay.png"),
-          status: true
+      orderMsg: this.tool.orderTc,
+      payWay: {
+        way: [
+          {
+            name: "微信支付",
+            icon: require("@/xhamy/img/i_wxpay.png"),
+            status: true
+          },
+          {
+            name: "余额支付",
+            icon: require("@/xhamy/img/i_yuepay.png"),
+            status: false
+          }
+        ],
+        icon: {
+          normal: require("@/xhamy/img/unpick.png"),
+          active: require("@/xhamy/img/pick.png")
         },
-        {
-          name: "余额支付",
-          icon: require("@/xhamy/img/i_yuepay.png"),
-          status: false
-        }
-      ],
-      icon: {
-        normal: require("@/xhamy/img/unpick.png"),
-        active: require("@/xhamy/img/pick.png")
       },
-      radio: 0
-    };
-  },
 
-  components: {
-    oPayWay
+      radio: 0,
+      form: {
+        api_name: "pay_order",
+        macno: this.tool.macno, //设备编号
+        item_id: this.$route.query.id, // 套餐id
+        coupon_id: 0, // 优惠券id
+        pay_type: 2, //支付方式 1：余额 2：微信支付
+      },
+      couponMsg: null
+    };
   },
 
   created() {
     const _this = this;
+    console.log(this.$route)
+    if (this.base.getItem("couponMsg")) {
+      this.couponMsg = JSON.parse(this.base.getItem("couponMsg"))
+      this.form.coupon_id = this.couponMsg.id
+    }
   },
 
   mounted() {
     const _this = this;
+    _this.base.socket("connectinfo_beck_bjxhamy_" + _this.tool.userMsg.user_id, res => {
+      _this.$hideLoading()
+      _this.$toast(res.msg)
+      if (res.code == 1) {
+        
+      } else {
+        
+      }
+    })
   },
-  methods: {}
+  computed: {
+    total() {
+      let total = this.orderMsg.money - (this.couponMsg ? this.couponMsg.price : 0)
+      if (total < 0) {
+        total = 0
+      }
+      return total
+    }
+  },
+  methods: {
+    payNow() {
+      const _this = this;
+      this.axios.post("/Wxsite/Device/api", this.form).then(res => {
+        if (res.code == 1) {
+          _this.$xToast("success", res.msg);
+          setTimeout(() => {
+            _this.$router.replace({ name: "using" })
+          }, 1500);
+        } else {
+          _this.$toast(res.msg)
+        }
+      });
+    },
+    getVal(index) {
+      const _this = this;
+      switch (index) {
+        case 0:
+          _this.form.pay_type = 2
+          break;
+        case 1:
+          _this.form.pay_type = 1
+          break;
+        default:
+          break;
+      }
+    }
+  }
 };
 </script>
 <style lang='less' scoped>

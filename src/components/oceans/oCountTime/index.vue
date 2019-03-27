@@ -16,6 +16,10 @@ export default {
     time: {
       type: Number,
       default: 0
+    },
+    start: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -43,9 +47,11 @@ export default {
   methods: {
     init() {
       const _this = this;
-      _this.interval = setInterval(() => {
-        _this.cTime = _this.cTime + 1;
-      }, 1000);
+      if (_this.start) {
+        _this.interval = setInterval(() => {
+          _this.cTime = _this.cTime + 1;
+        }, 1000);
+      }
     }
   }
 };

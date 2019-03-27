@@ -4,7 +4,7 @@
       <div class="unpick mg-r-30">
         <div class="flex">
           <div class="icon">
-            <img src="@/xhamy/img/seat2.png" alt>
+            <img src="@/xhamy/img/seat2.png" alt="">
           </div>
           <div class="font16 mg-l-5">未选</div>
         </div>
@@ -12,7 +12,7 @@
       <div class="pick">
         <div class="flex">
           <div class="icon">
-            <img src="@/xhamy/img/seat1.png" alt>
+            <img src="@/xhamy/img/seat1.png" alt="">
           </div>
           <div class="font16 mg-l-5">已选</div>
         </div>
@@ -21,7 +21,7 @@
     <div class="seat flex flexBetween">
       <div class="flexItem" :style="style" v-for="(item,index) in seatData" :key="index">
         <img src="@/xhamy/img/seat1.png" v-if="item.selected">
-        <img src="@/xhamy/img/seat2.png" @click="selectSeat(item.id)" v-else>
+        <img src="@/xhamy/img/seat2.png" @click="selectSeat(index)" v-else>
       </div>
     </div>
   </div>
@@ -55,9 +55,16 @@ export default {
     const _this = this;
   },
   methods: {
-    selectSeat(id) {
+    selectSeat(index) {
       const _this = this;
-      _this.seatData[id].selected = !_this.seatData[id].selected;
+      _this.seatData.forEach(item => {
+        if (item.status == 1) {
+          item.selected = false
+        }
+      });
+      console.log(_this.seatData);
+      _this.seatData[index].selected = !_this.seatData[index].selected;
+      this.$emit("getCall", _this.seatData[index].device_id);
     }
   }
 };

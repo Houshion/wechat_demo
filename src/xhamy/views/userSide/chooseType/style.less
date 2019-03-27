@@ -1,17 +1,33 @@
 #chooseType {
-  .typeItem {
-    width: 30%;
-    margin-right: 5%;
-  }
 
-  .typeItem:nth-child(3n) {
-    margin-right: 0;
-  }
+    .modeItem,
+    .typeItem {
+        width: 30%;
+        margin-right: 5%;
+    }
 
-  .typeItem:nth-child(1),
-  .typeItem:nth-child(2),
-  .typeItem:nth-child(3),
-    {
-    margin-top: 0;
-  }
+    .modeItem:nth-child(3n),
+    .typeItem:nth-child(3n) {
+        margin-right: 0;
+    }
+
+    .modeItem:nth-child(1),
+    .modeItem:nth-child(2),
+    .modeItem:nth-child(3),
+    .typeItem:nth-child(1),
+    .typeItem:nth-child(2),
+    .typeItem:nth-child(3) {
+        margin-top: 0;
+    }
+
+    .countTime {
+        .bottom {
+            img {
+                width: 100%;
+                display: block;
+                border-bottom-left-radius: 5px;
+                border-bottom-right-radius: 5px;
+            }
+        }
+    }
 }

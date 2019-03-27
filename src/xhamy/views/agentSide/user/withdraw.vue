@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import oWithdraw from "@/components/oceans/oWithdraw";
+// import oWithdraw from "@/components/oceans/oWithdraw";
 export default {
   name: "withDraw",
   data() {
@@ -21,7 +21,7 @@ export default {
     };
   },
 
-  components: { oWithdraw },
+  // components: { oWithdraw },
 
   created() {
     const _this = this;
