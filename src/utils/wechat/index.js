@@ -2,7 +2,13 @@ import Vue from 'vue'
 import wechatAuth from './wechatAuth' //微信登录插件
 import router from '@/xhamy/router'
 import store from '@/store'
-const qs = require('qs');
+
+import { wechatAppid } from '@/config.js'
+
+import wechat from './jssdk'
+Vue.prototype.wechat = wechat;
+
+/* const qs = require('qs');
 router.beforeEach((to, from, next) => {
   if (store.state.loginStatus == 0) {
     //微信未授权登录跳转到授权登录页面
@@ -11,8 +17,8 @@ router.beforeEach((to, from, next) => {
     let parseUrl = qs.parse(url.split('?')[1])
     let loginUrl
     if (parseUrl.code && parseUrl.state) {
-      delete parseUrl.code
-      delete parseUrl.state
+      delete parseUrl.code //删除URL参数code
+      delete parseUrl.state //删除URL参数state
       loginUrl = `${url.split('?')[0]}?${qs.stringify(parseUrl)}`
     } else {
       loginUrl = url
@@ -20,7 +26,7 @@ router.beforeEach((to, from, next) => {
     wechatAuth.redirect_uri = loginUrl
     console.log(loginUrl)
     store.dispatch('setLoginStatus', 1)
-    // window.location.href = wechatAuth.authUrl
+    window.location.href = wechatAuth.authUrl
   } else if (store.state.loginStatus == 1) {
     try {
       wechatAuth.returnFromWechat(to.fullPath)
@@ -43,5 +49,5 @@ router.beforeEach((to, from, next) => {
   }
 })
 Vue.use(wechatAuth, {
-  appid: "wx744d7da2444764d5", // 微信公众号APPID
-})
+  appid: wechatAppid, // 微信公众号APPID
+}) */

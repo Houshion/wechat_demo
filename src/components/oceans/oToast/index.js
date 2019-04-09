@@ -93,7 +93,7 @@ export let oToast = (text, position, duration) => {
 import Xtoast from './vue/Xtoast.vue' //引入组件  
 let XtoastHonor = Vue.extend(Xtoast) // 创建组件构造器
 
-export let xToast = (type, content) => {
+export let xToast = (type, content, call) => {
     let XtoastDom = new XtoastHonor({
         el: document.createElement('div')
     })
@@ -116,6 +116,7 @@ export let xToast = (type, content) => {
     // 在指定 duration 之后让 toast消失  
     setTimeout(() => {
         XtoastDom.isShow = false;
+        call ? call() : ''
     }, 2000);
 }
 

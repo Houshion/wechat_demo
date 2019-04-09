@@ -21,7 +21,7 @@ Vue.prototype.$hideLoading = oHideLoading; //给Vue对象添加$hideLoading方�
 
 let Oceans = {}
 Oceans.install = function (Vue, options) {
-  Vue.component('oAlert', () => import('~/oAlert'))
+  Vue.component('noData', () => import('~/noData'))
   Vue.component('oBottomNav', () => import('~/oBottomNav'))
   Vue.component('oButton', () => import('~/oButton'))
   Vue.component('oCountDown', () => import('~/oCountDown'))
@@ -40,6 +40,7 @@ Oceans.install = function (Vue, options) {
   Vue.component('oWithdraw', () => import('~/oWithdraw'))
   Vue.component('oWithdraw', () => import('~/oWithdraw'))
   Vue.component('oCenter', () => import('~/oPersonCenter'))
+  Vue.component('oRefresh', () => import('~/oRefresh'))
   Vue.component('oMap', () => import('~/tMap'))
 }
 export default Oceans

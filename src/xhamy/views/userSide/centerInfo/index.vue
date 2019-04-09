@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { data } from "./script"
 export default {
   name: "centerInfo",
   data() {
@@ -21,51 +22,7 @@ export default {
         name: '',
         phone: ''
       },
-      listData: [
-        [
-          {
-            name: "我的钱包",
-            icon: require("@/xhamy/img/i_c1.png"),
-            url: "moneyPakage"
-          },
-          {
-            name: "我的优惠券",
-            icon: require("@/xhamy/img/i_c2.png"),
-            url: "coupon"
-          }
-        ],
-        [
-          {
-            name: "预约订单",
-            icon: require("@/xhamy/img/i_c3.png"),
-            url: "bookingOrder"
-          },
-          {
-            name: "订单信息",
-            icon: require("@/xhamy/img/i_c4.png"),
-            url: "orderList"
-          }
-        ],
-        [
-          {
-            name: "消息列表",
-            icon: require("@/xhamy/img/i_c5.png"),
-            url: "infomation"
-          }
-        ],
-        [
-          {
-            name: "我要报障",
-            icon: require("@/xhamy/img/i_c6.png"),
-            url: "reporting"
-          },
-          {
-            name: "关于我们",
-            icon: require("@/xhamy/img/i_c7.png"),
-            url: "aboutUs"
-          }
-        ]
-      ]
+      listData: data
     };
   },
 
@@ -82,6 +39,7 @@ export default {
     init() {
       const _this = this;
       this.axios.post("/wxsite/user/api", { api_name: "user_info" }).then(res => {
+        _this.$hideLoading()
         if (res.code == 1) {
           console.log(1);
           _this.tool.userMsg = res.data
@@ -91,7 +49,7 @@ export default {
             phone: res.data.mobile
           };
         } else {
-          _thsi.$toast(res.msg)
+          _this.$toast(res.msg)
         }
       })
     }

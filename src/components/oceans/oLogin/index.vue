@@ -2,11 +2,11 @@
   <div id="oLogin">
     <div class="headerImg pd-tb-35">
       <div class="img box mg-auto bfff">
-        <img src="@/xhamy/img/logo.jpg" alt>
+        <img src="@/xhamy/img/logo.jpg" alt="">
       </div>
     </div>
     <div class="loginBox pd-15">
-      <van-cell-group>
+      <van-cell-group class="tal">
         <van-field
           clearable
           v-model="boxMsg.username.value"
@@ -14,16 +14,27 @@
           :label="boxMsg.username.label"
           :error-message="error.user"
         >
-          <van-icon name="user-o" slot="left-icon" v-if="boxMsg.username.icon"/>
+          <img
+            :src="boxMsg.username.icon"
+            class="leftIcon"
+            slot="left-icon"
+            v-if="boxMsg.username.icon"
+          >
         </van-field>
         <van-field
+          v-if="boxMsg.sms"
           v-model="boxMsg.sms.value"
           left
           clearable
           placeholder="请输入短信验证码"
           :label="boxMsg.sms.label"
         >
-          <van-icon :name="boxMsg.sms.icon" slot="left-icon" v-if="boxMsg.sms.icon"/>
+          <van-icon
+            :name="boxMsg.sms.icon"
+            class="leftIcon"
+            slot="left-icon"
+            v-if="boxMsg.sms.icon"
+          />
           <!-- <van-button slot="button" size="small" type="primary">发送验证码</van-button> -->
           <o-button slot="button" @btnClick="sendCode">发送验证码</o-button>
         </van-field>
@@ -36,6 +47,12 @@
           :error-message="error.pass"
           @click-right-icon="passShow = !passShow;"
         >
+          <img
+            :src="boxMsg.password.icon"
+            class="leftIcon"
+            slot="left-icon"
+            v-if="boxMsg.password.icon"
+          >
           <van-icon name="eye-o" slot="right-icon" v-if="passShow"/>
           <van-icon name="closed-eye" slot="right-icon" v-else/>
         </van-field>
@@ -131,6 +148,10 @@ export default {
       border-color: #999;
       right: 15px;
     }
+  }
+  .leftIcon {
+    width: 24px;
+    display: block;
   }
 }
 </style>

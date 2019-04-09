@@ -1,16 +1,26 @@
 <template>
-  <div id="orderList">
-    <van-cell-group>
-      <van-cell
-        class="tal"
-        v-for="item in orderList"
-        :key="item.id"
-        :title="item.name"
-        :label="item.time"
+  <div id="orderList" class="v100">
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh" class="v100">
+      <van-list
+        :offset="50"
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
       >
-        <div class="font24 h100 flex flexEnd flexVcenter c000">-￥{{item.price | toFixed(2)}}</div>
-      </van-cell>
-    </van-cell-group>
+        <van-cell-group>
+          <van-cell
+            class="tal"
+            v-for="item in orderList"
+            :key="item.id"
+            :title="item.name"
+            :label="item.ctime"
+          >
+            <div class="font24 h100 flex flexEnd flexVcenter c000">-￥{{item.price | toFixed(2)}}</div>
+          </van-cell>
+        </van-cell-group>
+      </van-list>
+    </van-pull-refresh>
   </div>
 </template>
 
@@ -21,7 +31,11 @@ export default {
     orderList: Array
   },
   data() {
-    return {};
+    return {
+      isLoading: false,
+      loading: false,
+      finished: false
+    };
   },
 
   components: {},
@@ -33,7 +47,22 @@ export default {
   mounted() {
     const _this = this;
   },
-  methods: {}
+  methods: {
+    onRefresh() {
+      setTimeout(() => {
+        this.$toast('刷新成功');
+        this.isLoading = false
+      }, 500);
+    },
+    onLoad() {
+      this.$emit("onLoad")
+      // 异步更新数据
+      // setTimeout(() => {
+      //   // 加载状态结束
+      //   this.loading = false;
+      // }, 500);
+    }
+  }
 };
 </script>
 <style lang='less' scoped>

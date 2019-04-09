@@ -98,14 +98,14 @@ export default {
         site_id: this.tool.deviceMsg.site_id
       }).then(res => {
         if (res.code == 1) {
-          // _this.seatData = res.data.list
-          // _this.seatData.forEach((item, index) => {
-          //   let select = Object.assign({}, item, {
-          //     selected: item.status == 1 ? false : true
-          //   });
-          //   _this.$set(_this.seatData, index, select);
-          // });
-          // _this.seatData = res.data.list
+          _this.seatData = res.data.list
+          _this.seatData.forEach((item, index) => {
+            let select = Object.assign({}, item, {
+              selected: item.status == 1 ? false : true
+            });
+            _this.$set(_this.seatData, index, select);
+          });
+          _this.seatData = res.data.list
         }
       });
     },

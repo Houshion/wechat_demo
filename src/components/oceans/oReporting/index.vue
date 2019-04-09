@@ -7,7 +7,14 @@
       </div>
       <div class="border-b wd-80 mg-auto"></div>
       <div class="flex flexStart quesItem">
-        <div class="item box">二维码</div>
+        <o-button
+          class="item"
+          :color="item.status?'':'cfff'"
+          v-for="(item,index) in question"
+          :key="index"
+          @btnClick="changeQuestion(index)"
+        >{{item.name}}</o-button>
+        <!-- <div class="item box">二维码</div>
         <div class="item box selected">二维码</div>
         <div class="item box">二维码</div>
         <div class="item box">二维码</div>
@@ -16,7 +23,7 @@
         <div class="item box">二维码</div>
         <div class="item box">二维码</div>
         <div class="item box">二维码</div>
-        <div class="item box">二维码</div>
+        <div class="item box">二维码</div>-->
       </div>
     </div>
     <div class="update boxShadow pd-15 mg-b-15 radius10">
@@ -38,9 +45,12 @@
 <script>
 export default {
   name: "oReporting",
+  props: {
+    question: Array
+  },
   data() {
     return {
-      message: ""
+      message: "",
     };
   },
 
@@ -54,8 +64,30 @@ export default {
     const _this = this;
   },
   methods: {
-    onRead(file) {
-      console.log(file);
+    onRead(e) {
+      let file = e.file;
+      let param = new FormData(); // 创建form对象
+      console.log(file.file);
+
+      param.append("api_name", "upload_img");
+      param.append("img", file, file.name); // 通过append向form对象添加数据
+      console.log(param.get("img")); // FormData私有类对象，访问不到，可以通过get判断值是否传进去
+
+      let data = {
+        url: "http://mtzhll.shmtshiye.com/Wxsite/User/api",
+        param: param
+      }
+
+      this.base.update(data, e, res => {
+        console.log(res)
+      })
+    },
+    changeQuestion(index) {
+      this.question.forEach(item => {
+        item.status = false
+      });
+      this.question[index].status = true;
+      this.$emit("getQuestion", this.question[index])
     }
   }
 };
@@ -73,15 +105,15 @@ export default {
     width: 90%;
     margin: 0 auto;
     .item {
-      border: 1px solid #999;
       color: #999;
       width: 30%;
+      min-width: 80px;
       padding: 7px 0;
       border-radius: 5px;
-      margin-top: 15px;
-      margin-right: 5%;
+      margin-top: 5px;
+      margin: 0 1.5%;
       &:nth-child(3n) {
-        margin-right: 0;
+        // margin-right: 0;
       }
     }
     .selected {
@@ -109,5 +141,8 @@ export default {
       border: #ccc solid 1px;
     }
   }
+}
+.mu-raised-button {
+  line-height: auto;
 }
 </style>

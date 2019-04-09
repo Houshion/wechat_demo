@@ -1,44 +1,51 @@
-class tool {
+// 注入鑫海按摩椅相关
+import xhamyTool from "~xh/config/tools.js"
+class tool extends (xhamyTool) {
+    // 设备号相关处理
     set macno(val) {
         window.localStorage.setItem("macno", val);
     }
-
     get macno() {
         return window.localStorage.getItem("macno");
     }
-
+    // 设备信息相关处理
     set deviceMsg(val) {
-        JSON.parse(window.localStorage.setItem("deviceMsg", val));
+        window.localStorage.setItem("deviceMsg", JSON.stringify(val));
     }
-
     get deviceMsg() {
         return JSON.parse(window.localStorage.getItem("deviceMsg"));
     }
-
+    // token相关处理
     set token(val) {
         window.localStorage.setItem("token", val);
     }
-
     get token() {
         return window.localStorage.getItem("token");
     }
-
-    set orderTc(val) {
-        window.localStorage.setItem("orderTc", JSON.stringify(val));
+    // 优惠券相关处理
+    set couponMsg(val) {
+        window.localStorage.setItem("couponMsg", JSON.stringify(val));
     }
-
-    get orderTc() {
-        return JSON.parse(window.localStorage.getItem("orderTc"));
-    }
-
     get couponMsg() {
         return JSON.parse(window.localStorage.getItem("couponMsg"));
     }
+    // 个人信息相关处理
     set userMsg(val) {
         window.localStorage.setItem("userMsg", JSON.stringify(val));
     }
     get userMsg() {
         return JSON.parse(window.localStorage.getItem("userMsg"));
+    }
+
+    // 北京鑫海按摩椅项目使用方法
+    get xhamy() {
+        return xhamyTool
+    }
+
+    env() {
+        return process.env.NODE_ENV;
+        if (process.env.NODE_ENV === "development") return "development";   //开发环境
+        return 'production'                                                 //线上环境
     }
 }
 

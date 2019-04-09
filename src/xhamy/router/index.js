@@ -150,10 +150,6 @@ export default new Router({
   },
   // 以下为代理商路由
   {
-    path: "*",
-    redirect: "/"
-  },
-  {
     path: '/agent',
     name: 'agent',
     component: () => import('@/xhamy/views/agentSide/login'),
@@ -166,7 +162,7 @@ export default new Router({
     name: 'agent/agentCenter',
     component: () => import('@/xhamy/views/agentSide/center'),
     meta: {
-      title: '代理商中心',
+      title: '运营中心',
     }
   },
   {
@@ -190,7 +186,7 @@ export default new Router({
     name: 'agent/place/placeDetail',
     component: () => import('@/xhamy/views/agentSide/place/detail.vue'),
     meta: {
-      title: '场地管理',
+      title: '场地详情',
     }
   },
   {
@@ -198,7 +194,7 @@ export default new Router({
     name: 'agent/device',
     component: () => import('@/xhamy/views/agentSide/device'),
     meta: {
-      title: '设备管理',
+      title: '我的设备',
     }
   },
   {
@@ -230,7 +226,7 @@ export default new Router({
     name: 'agent/user',
     component: () => import('@/xhamy/views/agentSide/user'),
     meta: {
-      title: '账户管理',
+      title: '提现申请',
     }
   },
   {
@@ -238,7 +234,7 @@ export default new Router({
     name: 'agent/user/withdraw',
     component: () => import('@/xhamy/views/agentSide/user/withdraw.vue'),
     meta: {
-      title: '账户管理',
+      title: '提现申请',
     }
   },
   {
@@ -246,7 +242,7 @@ export default new Router({
     name: 'agent/error',
     component: () => import('@/xhamy/views/agentSide/error'),
     meta: {
-      title: '故障管理',
+      title: '故障列表',
     }
   },
   {
@@ -254,8 +250,12 @@ export default new Router({
     name: 'agent/booking',
     component: () => import('@/xhamy/views/agentSide/booking'),
     meta: {
-      title: '预约管理',
+      title: '预约订单',
     }
+  },
+  {
+    path: "*",
+    redirect: "/"
   },
   ]
 })

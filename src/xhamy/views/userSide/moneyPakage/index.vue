@@ -4,7 +4,7 @@
       <div class="c999">余额</div>
       <div class="mg-tb-20">
         ￥
-        <span class="font32 fontb">100.00</span>
+        <span class="font32 fontb">{{money}}</span>
       </div>
       <div class="button wd-30 mg-auto">
         <o-button to="recharge">充值</o-button>
@@ -23,6 +23,7 @@ export default {
   name: "moneyPakage",
   data() {
     return {
+      money: 0,
       data: [
         {
           id: 1,
@@ -53,6 +54,17 @@ export default {
 
   created() {
     const _this = this;
+
+    if (!this.tool.userMsg) {
+      this.tool.xhamy.getUser();
+    }
+    this.money = this.tool.userMsg.money
+
+    this.axios.post("/wxsite/user/api", { api_name: "consumptionLog" }).then(res => {
+      _this.$hideLoading();
+      if (res.code != 1) return _this.$toast(res.msg)
+      _this.data = res.data
+    })
   },
 
   mounted() {

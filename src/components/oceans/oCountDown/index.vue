@@ -12,10 +12,10 @@
 <script>
 export default {
   props: {
-    time: {
-      type: Number,
-      default: 0
-    },
+    // time: {
+    //   type: Number,
+    //   default: 0
+    // },
     title: {
       type: String,
       default: "倒计时"
@@ -26,7 +26,8 @@ export default {
   data() {
     return {
       interval: null,
-      cTime: this.time
+      cTime: 0,
+      time: 0
     };
   },
 
@@ -36,10 +37,15 @@ export default {
       // return this.time;
     }
   },
+  watch: {
+    time() {
+      this.init();
+    }
+  },
 
   created() {
     const _this = this;
-    _this.init();
+    // _this.init();
   },
 
   mounted() {
@@ -48,6 +54,7 @@ export default {
   methods: {
     init() {
       const _this = this;
+      _this.cTime = _this.time;
       _this.interval = setInterval(() => {
         if (_this.cTime > 1) {
           _this.cTime = _this.cTime - 1;

@@ -1,6 +1,6 @@
 <template>
   <div class="toast" v-if="isShow">
-    <div class="toast-div">{{ text }}</div>
+    <div class="toast-div tac">{{ text }}</div>
   </div>
 </template>  
   
@@ -17,7 +17,6 @@ export default {
 </script>  
   
 <style scoped>
-@import "../../../../assets/css/o_color.less";
 * {
   margin: 0;
   padding: 0;

@@ -21,17 +21,35 @@ export default {
 
   mounted() {
     const _this = this;
+    _this.base.socket("connectinfo_beck_bjxhamy_" + _this.tool.userMsg.user_id, res => {
+      _this.$hideLoading()
+      let data = JSON.parse(res.data.data)
+      console.log(data)
+      if (res.code == 1 && data.status == 1) {
+        _this.$xToast("success", "订单创建成功!", () => {
+          setTimeout(() => {
+            _this.$router.replace({
+              name: "chooseType",
+              query: {
+                order_id: data.order_id,
+                start: 1
+              }
+            })
+          }, 1500);
+        })
+      } else {
+        _this.$toast(data.message)
+      }
+    })
   },
   methods: {
     open() {
       const _this = this;
-      this.$showLoading()
       this.axios.post("/wxsite/device/postpaid",
         { macno: this.tool.macno }
       ).then(res => {
-        if (res.code == 1) {
-          _this.$router.replace({ name: "chooseType" })
-        } else {
+        if (res.code != 1) {
+          _this.$hideLoading()
           _this.$toast(res.msg)
         }
       })

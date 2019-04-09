@@ -17,8 +17,8 @@ export const timeStr = (time, ff) => {
   var year = time.getFullYear();
   var month =
     time.getMonth() + 1 < 10 ?
-    "0" + (time.getMonth() + 1) :
-    time.getMonth() + 1;
+      "0" + (time.getMonth() + 1) :
+      time.getMonth() + 1;
   var date = time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
   var hour = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
   var minute =
@@ -68,6 +68,7 @@ export const timeStr = (time, ff) => {
  * 计时器
  * @author Ocean
  * @param {int} value 传入时间，单位 秒
+ * @param {string} dw 时分秒间间隔符号，默认为":"，cn为中文
  */
 export const countTime = (value, dw) => {
   let theTime = parseInt(value)
@@ -99,13 +100,30 @@ export const countTime = (value, dw) => {
       result = '' + parseInt(theTime2) + dw + result
     }
   } else {
-    result = '' + parseInt(theTime)
+    result = '' + (parseInt(theTime) < 10 ? "0" + theTime : parseInt(theTime))
     if (theTime1 > 0) {
-      result = '' + parseInt(theTime1) + ':' + result
+      result = '' + (parseInt(theTime1) < 10 ? "0" + theTime1 : parseInt(theTime1)) + ':' + result
     }
     if (theTime2 > 0) {
-      result = '' + parseInt(theTime2) + ':' + result
+      result = '' + (parseInt(theTime2) < 10 ? "0" + theTime2 : parseInt(theTime2)) + ':' + result
     }
   }
   return result
+}
+
+// 正计时，只返回分
+export const countMin = (value) => {
+  let theTime = parseInt(value)
+  let theTime1 = 0
+  let theTime2 = 0
+  let result
+  if (theTime > 60) {
+    theTime1 = parseInt(theTime / 60)
+    theTime = parseInt(theTime % 60)
+    // if (theTime1 > 60) {
+    //   theTime2 = parseInt(theTime1 / 60)
+    //   theTime1 = parseInt(theTime1 % 60)
+    // }
+  }
+  return theTime1
 }

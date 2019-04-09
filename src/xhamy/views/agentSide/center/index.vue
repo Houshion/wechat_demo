@@ -3,36 +3,33 @@
     <div class="pd-25 bcross">
       <div class="flex flexAround cfff pd-20 font14">
         <div class="orderNum">
-          <div class="font32 mg-b-10 fontb">15</div>
+          <div class="font32 mg-b-10 fontb">{{accountData.today_order_num}}</div>
           <div>今日订单数</div>
         </div>
         <div class="orderNum">
-          <div class="font32 mg-b-10 fontb">5/10</div>
+          <div
+            class="font32 mg-b-10 fontb"
+          >{{accountData.device_online_num}}/{{accountData.device_total_num}}</div>
           <div>在线/总台数</div>
         </div>
       </div>
       <div class="flex flexAround cfff font14">
         <div class="orderNum">
-          <div class="mg-b-5 fontb">￥688.88</div>
+          <div class="mg-b-5 fontb">￥{{accountData.today_income}}</div>
           <div>今日收益</div>
         </div>
         <div class="orderNum">
-          <div class="mg-b-5 fontb">￥688.88</div>
-          <div>今日收益</div>
+          <div class="mg-b-5 fontb">￥{{accountData.month_income}}</div>
+          <div>本月收益</div>
         </div>
         <div class="orderNum">
-          <div class="mg-b-5 fontb">￥688.88</div>
-          <div>今日收益</div>
+          <div class="mg-b-5 fontb">￥{{accountData.total_income}}</div>
+          <div>累计收益</div>
         </div>
       </div>
     </div>
     <div class="btnFun flex flexWrap flexStart mg-t-15">
-      <div
-        class="type boxShadow radius10 border"
-        v-show="item.status"
-        v-for="(item,index) in dataType"
-        :key="index"
-      >
+      <div class="type boxShadow radius10 border" v-for="(item,index) in dataType" :key="index">
         <router-link :to="{ path: item.url}">
           <img :src="item.icon">
           <div class="c999">{{item.title}}</div>
@@ -43,54 +40,22 @@
 </template>
 
 <script>
+import { baseUrl } from "@/config.js";
+import { data } from "./script"
+import test from "~xh/config/tools.js"
 export default {
   name: "agentCenter",
   data() {
     return {
-      dataType: [
-        {
-          title: "收入统计",
-          icon: require("@/xhamy/img/icon_count.png"),
-          url: "/agent/account",
-          status: true
-        },
-        {
-          title: "场地管理",
-          icon: require("@/xhamy/img/icon_place.png"),
-          url: "/agent/place",
-          status: true
-        },
-        {
-          title: "设备管理",
-          icon: require("@/xhamy/img/icon_device.png"),
-          url: "/agent/device",
-          status: false
-        },
-        {
-          title: "订单管理",
-          icon: require("@/xhamy/img/icon_order.png"),
-          url: "/agent/order",
-          status: true
-        },
-        {
-          title: "账户管理",
-          icon: require("@/xhamy/img/icon_user.png"),
-          url: "/agent/user",
-          status: true
-        },
-        {
-          title: "故障管理",
-          icon: require("@/xhamy/img/icon_error.png"),
-          url: "/agent/error",
-          status: true
-        },
-        {
-          title: "预约管理",
-          icon: require("@/xhamy/img/icon_booking.png"),
-          url: "/agent/booking",
-          status: false
-        }
-      ]
+      dataType: data,
+      accountData: {
+        device_online_num: 0,
+        device_total_num: 0,
+        month_income: 0,
+        today_income: 0,
+        today_order_num: 0,
+        total_income: 0,
+      }
     };
   },
 
@@ -98,12 +63,25 @@ export default {
 
   created() {
     const _this = this;
+    this.init()
   },
 
   mounted() {
     const _this = this;
   },
-  methods: {}
+  methods: {
+    init() {
+      const _this = this;
+      this.axios.post("/wxsite/agent/api", {
+        api_name: "get_operate_data",
+        token: this.base.getItem("agentToken")
+      }).then(res => {
+        _this.$hideLoading();
+        if (res.code != 1) return _this.$toast(res.msg)
+        _this.accountData = res.data
+      })
+    }
+  }
 };
 </script>
 <style lang='less' scoped>

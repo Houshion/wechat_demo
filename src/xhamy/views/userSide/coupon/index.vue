@@ -3,6 +3,7 @@
     <o-coupon :list="couponList" @getCoupon="getCoupon">
       <img src="@/xhamy/img/coupon_icon.png" class="couponIcon">
     </o-coupon>
+    <no-data v-if="couponList.length<=0"></no-data>
   </div>
 </template>
 <script>
@@ -25,6 +26,7 @@ export default {
       page: 1,
       pagesize: 20
     }).then(res => {
+      _this.$hideLoading()
       res.data.forEach(item => {
         _this.couponList.push({
           id: item.id,
@@ -43,12 +45,15 @@ export default {
   methods: {
     getCoupon(val) {
       if (this.$route.query.type) {
-        this.$router.go(-1)
-        if (this.tool.couponMsg) {
+        let couponJson = JSON.stringify(this.couponList[val]);
+
+        if (this.tool.couponMsg && couponJson === this.base.getItem("couponMsg")) {
           this.base.moveItem("couponMsg");
         } else {
-          this.base.setItem('couponMsg', JSON.stringify(this.couponList[val]));
+          this.base.setItem('couponMsg', couponJson);
         }
+
+        this.$router.go(-1)
       }
     }
   }

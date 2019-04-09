@@ -1,31 +1,28 @@
 <template>
-    <div id="loading" v-if="isShow">
-        <div class="loadingBox">
-            <div class="loading loading7">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <div class="loading_text">{{ content }}</div>
-        </div>
-        <div class="mask" @click="isShow = false"></div>
+  <div id="loading" v-if="isShow">
+    <div class="loadingBox">
+      <div class="loading loading4">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="loading_text">{{ content }}</div>
     </div>
+    <div class="mask" @click="isShow = false"></div>
+  </div>
 </template>
 <script>
 export default {
-    data() {
-        return {
-            isShow: true,
-            content: "",
-            src: ""
-        };
-    },
-    methods: {}
+  data() {
+    return {
+      isShow: true,
+      content: "",
+      src: ""
+    };
+  },
+  methods: {}
 };
 </script>
 

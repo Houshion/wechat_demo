@@ -35,15 +35,20 @@ export default {
       orderTc: {},
       form: {
         api_name: "get_device_pack",
-        macno: this.tool.macno
+        macno: ''
       },
       item_id: 0
     };
   },
 
   created() {
+    let macno = this.$route.query.macno
+    this.tool.macno = macno;
+    this.form.macno = macno
+
     this.getBanner();
     this.getTc();
+    this.tool.xhamy.getUser();
   },
 
   mounted() {
@@ -75,6 +80,9 @@ export default {
           });
         } else {
           _this.$toast(res.msg)
+          setTimeout(() => {
+            _this.$router.push({ name: "/" })
+          }, 2000);
         }
       });
     },
@@ -91,7 +99,7 @@ export default {
         money: this.deviceTc[i].price,
       }
 
-      this.tool.orderTc = this.orderTc;
+      this.tool.xhamy.orderTc = this.orderTc;
     },
     confirm() {
       if (this.item_id == 0) return this.$toast("请选择套餐")

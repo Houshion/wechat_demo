@@ -14,7 +14,9 @@ import {
   Dialog,
   SwipeCell,
   Field,
-  Uploader
+  Uploader,
+  List,
+  PullRefresh
 }
   from 'vant';
 import 'vant/lib/index.css';
@@ -34,3 +36,5 @@ Vue
   .use(SwipeCell)
   .use(Field)
   .use(Uploader)
+  .use(List)
+  .use(PullRefresh)

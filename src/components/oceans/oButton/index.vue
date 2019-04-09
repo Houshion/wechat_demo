@@ -4,7 +4,7 @@
       @click="btnClick"
       v-if="color=='cmain'"
       :to="to"
-      class="mainBorder wd-100 radius5 cmain"
+      class="btnLine mainBorder wd-100 radius5 cmain"
     >
       <slot></slot>
     </mu-button>
@@ -14,7 +14,7 @@
       :color="'#c2a466'"
       :style="'border-color:'+color"
       :to="to"
-      class="wd-100 radius5"
+      class="btnLine wd-100 radius5"
     >
       <slot></slot>
     </mu-button>
@@ -23,7 +23,7 @@
       v-else
       :style="'border:1px solid '+color+';color:'+color"
       :to="to"
-      class="wd-100 radius5"
+      class="btnLine wd-100 radius5"
     >
       <slot></slot>
     </mu-button>
@@ -58,4 +58,7 @@ export default {
 };
 </script>
 <style lang='less' scoped>
+.btnLine {
+  line-height: normal;
+}
 </style>

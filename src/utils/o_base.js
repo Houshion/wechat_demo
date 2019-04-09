@@ -2,6 +2,7 @@ import axios from "./axios";
 import wx from "weixin-js-sdk";
 import { oToast } from '@/components/oceans/oToast/index.js'
 // import "./jsSHA.js";
+var ws;
 export default {
   /******************************* 跳转 **************************/
   goTo(to, query) {
@@ -11,164 +12,7 @@ export default {
       query: query
     })
   },
-  /******************************* 微信信息 **************************/
-  getWx(callback, jsApiList) {
-    const _this = this;
-    axios.post("/Wxsite/Device/api", {
-      api_name: "get_ticket",
-      token: window.localStorage.getItem("token"),
-      url: location.href
-    }).then(res => {
-      if (res.code == 1) {
-        let appId, timestamp, nonceStr, signature;
-        if (!res.data.signature) {
-          timestamp = (new Date().getTime() / 1000).toFixed(0);
-          let noncestr = Math.random()
-            .toString(36)
-            .substr(2);
-          // let ticket = wx_js(res.data.data.result.ticket, timestamp, noncestr);
-          let e = decodeURIComponent(
-            "jsapi_ticket=" +
-            res.data.ticket +
-            "&noncestr=" +
-            noncestr +
-            "&timestamp=" +
-            timestamp +
-            "&url=" +
-            location.href.split("#")[0]
-          ),
-            s = new jsSHA(e, "TEXT"),
-            ticket = s.getHash("SHA-1", "HEX");
-          // ticket = res.data.data.ticket;
-          console.log(ticket)
-          console.log(res.data.ticket)
-          // config信息
-          appId = "wx6a088195d7884586";
-          nonceStr = noncestr;
-          signature = ticket
-        } else {
-          console.log(res.data.nonceStr)
-          appId = res.data.appId;
-          nonceStr = res.data.nonceStr;
-          signature = res.data.signature;
-          timestamp = res.data.timestamp;
-        }
-        wx.config({
-          debug: false, // 开启调试模式,调用的所有api的返回值会在客户端//alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-          appId: appId, // 必填，公众号的唯一标识
-          timestamp: timestamp, // 必填，生成签名的时间戳
-          nonceStr: nonceStr, // 必填，生成签名的随机串
-          signature: signature, // 必填，签名，见附录1
-          jsApiList: jsApiList ? jsApiList : [
-            'updateAppMessageShareData',
-            'updateTimelineShareData',
-            'onMenuShareTimeline',//（即将废弃）
-            'onMenuShareAppMessage',//（即将废弃）
-            'onMenuShareQQ',//（即将废弃）
-            'onMenuShareWeibo',
-            'onMenuShareQZone',
-            'startRecord',
-            'stopRecord',
-            'onVoiceRecordEnd',
-            'playVoice',
-            'pauseVoice',
-            'stopVoice',
-            'onVoicePlayEnd',
-            'uploadVoice',
-            'downloadVoice',
-            'chooseImage',
-            'previewImage',
-            'uploadImage',
-            'downloadImage',
-            'translateVoice',
-            'getNetworkType',
-            'openLocation',
-            'getLocation',
-            'hideOptionMenu',
-            'showOptionMenu',
-            'hideMenuItems',
-            'showMenuItems',
-            'hideAllNonBaseMenuItem',
-            'showAllNonBaseMenuItem',
-            'closeWindow',
-            'scanQRCode',
-            'chooseWXPay',
-            'openProductSpecificView',
-            'addCard',
-            'chooseCard',
-            'openCard',
-          ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-        });
-        return callback ? callback() : ""
-      } else {
-        oToast(res.msg)
-      }
-    });
-  },
-  callpay(jsApiParameters, callback) {
-    if (typeof WeixinJSBridge == "undefined") {
-      if (document.addEventListener) {
-        document.addEventListener(
-          "WeixinJSBridgeReady",
-          jsApiCall,
-          false
-        );
-      } else if (document.attachEvent) {
-        document.attachEvent("WeixinJSBridgeReady", jsApiCall);
-        document.attachEvent("onWeixinJSBridgeReady", jsApiCall);
-      }
-    } else {
-      WeixinJSBridge.invoke(
-        "getBrandWCPayRequest",
-        jsApiParameters, // 提交的支付信息
-        function (payBack) {
-          WeixinJSBridge.log(payBack.err_msg);
-          callback(payBack.err_msg)
-        }
-      );
-    }
-  },
-  getTmapLocation(call) {
-    const _this = this;
-    wx.ready(function () {
-      wx.getLocation({
-        type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-        success: function (res) {
-          var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-          var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-          var speed = res.speed; // 速度，以米/每秒计
-          var accuracy = res.accuracy; // 位置精度
-          call({
-            lat: latitude,
-            lng: longitude,
-          })
-        }
-      });
-    })
-  },
-  scan(type, success) {
-    wx.ready(function () {
-      wx.scanQRCode({
-        needResult: type, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-        scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-        success: function (res) {
-          success()
-          // alert(JSON.stringify(res));
-          // _this.$router.push({
-          //   name: "addPackage",
-          //   query: {
-          //     device_number: res.resultStr,
-          //     // device_number: "1000100010001612",
-          //     type: 1
-          //   }
-          // });
-        },
-        error: function (err) {
-          dlctipbox.show(err);
-        }
-      });
-    });
-  },
+
   /******************************* 判断类 **************************/
   // 验证手机
   isPhone(phone) {
@@ -269,6 +113,11 @@ export default {
   },
 
   /****************************** 格式化时间 ******************************/
+  /**
+   * 
+   * @param {Number} time 传入的时间戳
+   * @param {String} ff 格式，例：“Y-m-d H:i:s”
+   */
   timeStr(time, ff) {
     if (Number(time).toString().length == 10) {
       time = Number(time + "000")
@@ -325,22 +174,30 @@ export default {
   },
 
   /****************************** webSocket ******************************/
+  /**
+   * 
+   * @param {any} data 发送的数据
+   * @param {function} cb 回调函数
+   */
   socket(data, cb) {
     if ("WebSocket" in window) {
-      // var ws = new WebSocket("ws://120.77.72.190:9999");
-      var ws = new WebSocket("ws://120.77.72.190:8082");
+      let interval;
+      ws = new WebSocket("ws://120.77.72.190:9999");
+      // var ws = new WebSocket("ws://120.77.72.190:8082");
       ws.onopen = function () {
+        // 向机器云发送内容
         ws.send(data);
+        // 每隔30秒轮询一次，反复发送空指令以防断开socket
+        interval = setInterval(() => {
+          console.log("relink");
+          ws.send("connectinfo_999999");
+        }, 30000);
       };
       ws.onmessage = function (res) {
-        cb({ code: 1, data: res.data });
-        ws.close() // 获取到数据后，关闭socket
+        cb({ code: 1, data: res });
+        clearInterval(interval)
       };
-      ws.onclose = function (close) {
-        // alert(JSON.stringify(close));
-        console.log(JSON.stringify(close));
-        // cb({ code: 3, msg: "连接断开", data: close });
-      };
+
       ws.error = function (err) {
         // alert(JSON.stringify(err));
         console.log(JSON.stringify(err));
@@ -350,5 +207,44 @@ export default {
       console.log(JSON.stringify(err));
       // cb({ code: 2, msg: "当前浏览器不支持WebSocket!" });
     }
+  },
+  socketClose(call) {
+    ws.close();
+
+    ws.onclose = function (close) {
+      console.log("连接断开");
+      call(close)
+      // cb({ code: 3, msg: "连接断开", data: close });
+    };
+  },
+  /****************************** update ******************************/
+  /**
+   * 
+   * @param {Object} data 传入的参数，url为请求路径，param为请求参数
+   * @param {function} call 回调函数
+   */
+  update(data, e, call) {
+    let file = e.file;
+    // 上传照片
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = function (evt) {
+      //console.log(evt.target)
+      // _this.imgs = evt.target.result;
+      // _this.show = false;
+    };
+
+    // 添加请求头
+    let config = { "Content-Type": "multipart/form-data" };
+
+    axios
+      .post(
+        data.url,
+        data.param,
+        config
+      )
+      .then(res => {
+        call(res)
+      });
   },
 }

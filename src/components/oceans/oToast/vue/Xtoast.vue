@@ -2,7 +2,7 @@
   <div id="Xtoast" v-if="isShow">
     <div class="XtoastBox">
       <div class="Xtoast_pic">
-        <img :src="src" alt>
+        <img :src="src" alt="">
       </div>
       <div class="Xtoast_text">{{ content }}</div>
     </div>

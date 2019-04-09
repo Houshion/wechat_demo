@@ -39,8 +39,8 @@ class VueWechatAuthPlugin {
   }
 
   set redirect_uri(redirect_uri) {
-    // this._redirect_uri = encodeURIComponent(redirect_uri)
-    this._redirect_uri = 'http://www.zjgxkl.com/h5/dist/index0.html'
+    this._redirect_uri = encodeURIComponent(redirect_uri)
+    // this._redirect_uri = encodeURIComponent('http://bjxhamy.app.xiaozhuschool.com/h5test/#/')
   }
 
   get redirect_uri() {

@@ -3,7 +3,10 @@
     <div class="circle-border mg-auto">
       <div class="circleContent flex flexCenter cfff">
         <div class="wd-100 font18">使用时间</div>
-        <div class="wd-100 font24 fontb">{{cTime|countTime('cn')}}</div>
+        <div class="wd-100 font24 fontb">
+          {{cTime|countMin}}
+          <span class="font14">min</span>
+        </div>
       </div>
     </div>
   </div>
@@ -52,7 +55,7 @@ export default {
           _this.cTime = _this.cTime + 1;
         }, 1000);
       }
-    }
+    },
   }
 };
 </script>

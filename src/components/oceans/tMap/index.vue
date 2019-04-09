@@ -16,26 +16,26 @@ export default {
       type: String,
       default: require("./img/location.png")
     },
-    // center: {
-    //   type: Object,
-    //   default: () => ({
-    //     lat: 39.916527,
-    //     lng: 116.397128
-    //   })
-    // },
+    center: {
+      type: Object,
+      default: () => ({
+        lat: 39.916527,
+        lng: 116.397128
+      })
+    },
   },
   data() {
     return {
       // 地图
-      mapView: "",
+      map: null,
       // 标注点数组
       markersArray: [],
       // 中心点图标
       // locationImg: require("./img/location.png")
-      center: {
-        lat: 23.02067,
-        lng: 113.75179
-      }
+      // center: {
+      //   lat: 23.02067,
+      //   lng: 113.75179
+      // }
     };
   },
 
@@ -43,48 +43,39 @@ export default {
 
   created() {
     const _this = this;
-    // this.$showLoading();
-    // _this.base.getWx(function () {
-    //   _this.base.getTmapLocation(res => {
-    //     _this.center = res;
-    //     _this.init(_this.marker);
-    //   })
-    // })
   },
 
   mounted() {
     const _this = this;
-    // _this.init(_this.marker);
-    _this.map();
+    // _this.wechat.getWx(function () {
+    //   _this.wechat.getTmapLocation(res => {
+    //     _this.center = res;
+    //   })
+    // })
+
+  },
+  watch: {
+    center() {
+      this.init();
+    },
+    marker() {
+      this.setMarker()
+    },
   },
   methods: {
-    map() {
-      var center = new qq.maps.LatLng(39.916527, 116.397128);
-      var map = new qq.maps.Map(document.getElementById('tMap'), {
-        center: center,
-        zoom: 13
-      });
-      //创建marker
-      var marker = new qq.maps.Marker({
-        position: center,
-        map: map
-      });
-    },
-    init(arr) {
+    init() {
       const _this = this;
       _this.clearOverlays();
-      _this.$hideLoading();
       // 创建地图，设置地图中心点
       let center = new qq.maps.LatLng(_this.center.lat, _this.center.lng);
-      let map = null;
-      if (map) {
-        map.setCenter(center);
+      if (_this.map) {
+        _this.map.setCenter(center);
       } else {
-        map = new qq.maps.Map(document.getElementById("tMap"), {
+        _this.map = new qq.maps.Map(document.getElementById("tMap"), {
           center: center,
           disableDefaultUI: true,
           zoomControl: false,
-          zoom: 18,
+          zoom: 12,
           mapTypeId: qq.maps.MapTypeId.ROADMAP,
           draggable: true, //手势控制, 用来设置地图是否能够鼠标拖拽，默认值为“可以”；
           scrollwheel: true, //用来配置地图是否能够通过鼠标滚轮操作进行放大，默认值为“可以”；
@@ -92,7 +83,7 @@ export default {
         });
         let marker = new qq.maps.Marker({
           position: center,
-          map: map
+          map: _this.map
         });
 
         let anchor = new qq.maps.Point(10.5, 39),
@@ -106,11 +97,16 @@ export default {
           );
         marker.setIcon(markerIcon);
       }
-      arr.map(item => {
+      _this.$hideLoading();
+    },
+    setMarker() {
+      const _this = this;
+      _this.marker.map(item => {
+        console.log(item)
         // 创建标记
         let marker = new qq.maps.Marker({
-          position: new qq.maps.LatLng(item.latitude, item.longitude),
-          map: map,
+          position: new qq.maps.LatLng(item.lat, item.lng),
+          map: _this.map,
           // 将数据信息赋值给marker的data属性，用做点击显示与跳转
           data: item
         });
@@ -146,5 +142,6 @@ export default {
 <style lang='less' scoped>
 #tMap {
   height: 100%;
+  text-align: left;
 }
 </style>

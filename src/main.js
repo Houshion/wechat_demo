@@ -3,13 +3,16 @@ import App from './App.vue'
 import router from '@/xhamy/router'
 import store from './store/index.js'
 
+// import oceans from "@/oceans.js"
+// Vue.use(oceans)
+
+
 import oceansComponents from "@/components/oceans"
 Vue.use(oceansComponents)
 
 // 引入公共样式
 import "@/assets/css/o_index.less";
 import "@/assets/css/o_loading.less";
-// import "@/assets/css/o_style.css";
 import "@/assets/css/o_color.less";
 
 // 全局引入axios请求
@@ -31,7 +34,7 @@ import tools from "@/utils/tools"
 Vue.prototype.tool = tools
 
 // 引入微信登录授权
-// import "@/utils/wechat"
+import "@/utils/wechat"
 
 Vue.config.productionTip = false
 
