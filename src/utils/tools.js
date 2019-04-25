@@ -1,5 +1,5 @@
 // 注入鑫海按摩椅相关
-import xhamyTool from "~xh/config/tools.js"
+import xhamyTool from "~xh/tools"
 class tool extends (xhamyTool) {
     // 设备号相关处理
     set macno(val) {

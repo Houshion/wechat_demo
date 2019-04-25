@@ -29,7 +29,7 @@ export default {
         api_name: 'count_down',
         order_id: id
       }).then(res => {
-        _this.$hideLoading()
+        _this.hideLoading()
         if (res.code == 1) {
           _this.$refs.countDown.time = res.data.second;
           _this.title = res.data.item_name;

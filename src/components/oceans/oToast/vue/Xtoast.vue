@@ -51,7 +51,7 @@ export default {
   position: relative;
   border-radius: 15px;
   padding: 15px;
-  z-index: 9;
+  z-index: 99999;
 }
 #Xtoast .XtoastBox div {
   margin: 10px 0;

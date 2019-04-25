@@ -1,39 +1,45 @@
 <template>
   <div id="agentBooking" class="pd-15">
-    <div
-      class="boxShadow radius10 tal pd-15 mg-b-15"
-      v-for="(item,index) in errorData"
-      :key="index"
-    >
-      <div class="fontb font18">{{item.errorName}}</div>
-      <div class="flex flexStart mg-tb-10">
-        <div class="title c999 wd-30">设备编号</div>
-        <div class="wd-70">{{item.macno}}</div>
+    <o-list :title="item.name" v-for="(item,index) in list" :key="index">
+      <div class="title h100" slot="title">
+        <div class="font16 tal">{{item.nickname}}</div>
       </div>
-      <div class="flex flexStart">
-        <div class="title c999 wd-30">设备地址</div>
-        <div class="wd-70">{{item.place}}</div>
+      <div class="tac" slot="center">
+        <div class="wd-100 c000">{{item.seat_number}}</div>
+        <div class="wd-100 cccc">预约座位</div>
       </div>
-    </div>
+      <div slot="right" class="tar">
+        <div class="c000">{{item.minute}}min</div>
+        <div class="cccc">到达时间</div>
+      </div>
+    </o-list>
+    <no-data v-if="list.length<=0"></no-data>
   </div>
 </template>
 
 <script>
+import oList from "@/components/oceans/oList";
 export default {
   name: "agentBooking",
   data() {
     return {
-      errorData: [
-        { errorName: "停机", macno: "158742151", place: "南城区高盛科技园" },
-        { errorName: "停机", macno: "158742151", place: "南城区高盛科技园" }
-      ]
+      list: Array,
+      form: {
+        api_name: "subscribe_order",
+        token: this.base.getItem("agentToken")
+      }
     };
   },
 
-  components: {},
+  components: { oList },
 
   created() {
     const _this = this;
+    this.axios.post('/Wxsite/Agent/api', this.form).then(res => {
+      _this.hideLoading();
+      if (res.code != 1) return _this.toast(res.msg)
+      _this.list = res.data.list
+    })
   },
 
   mounted() {

@@ -13,10 +13,12 @@
             class="tal"
             v-for="item in orderList"
             :key="item.id"
-            :title="item.name"
-            :label="item.ctime"
+            :title="item.name?item.name:'提现到银行'"
+            :label="(item.ctime || item.retime)"
           >
-            <div class="font24 h100 flex flexEnd flexVcenter c000">-￥{{item.price | toFixed(2)}}</div>
+            <div
+              class="font24 h100 flex flexEnd flexVcenter c000"
+            >-￥{{(item.price||item.money) | toFixed(2)}}</div>
           </van-cell>
         </van-cell-group>
       </van-list>
@@ -50,7 +52,7 @@ export default {
   methods: {
     onRefresh() {
       setTimeout(() => {
-        this.$toast('刷新成功');
+        this.toast('刷新成功');
         this.isLoading = false
       }, 500);
     },

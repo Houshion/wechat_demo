@@ -32,7 +32,7 @@ export let oConfirm = (obj, cont) => {
     let isObj = typeof obj == 'object';
     let content = isObj ? obj.content : cont ? cont : obj;
 
-    confirmDom.title = cont ? isObj ? obj.title : obj : '';
+    confirmDom.title = cont ? '' : isObj ? obj.title : obj;
     switch (content) {
         case "name":
             confirmDom.input = true;
@@ -53,8 +53,8 @@ export let oConfirm = (obj, cont) => {
     if (isObj) {
         confirmDom.refunc = obj.confirm;
         confirmDom.refunc2 = obj.cancel;
-        confirmDom.name = obj.leftBtn;
-        confirmDom.name2 = obj.rightBtn;
+        confirmDom.name = obj.rightBtn;
+        confirmDom.name2 = obj.leftBtn;
     }
 
 }

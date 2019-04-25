@@ -39,8 +39,8 @@ export const setLoginStatus = function ({
 }, query) {
   if (query == 0 || query == 1) {
     //上线打开注释，本地调试注释掉
-    removeToken()
-    removeUserInfo()
+    // removeToken()
+    // removeUserInfo()
   }
   commit(types.SET_LOGIN_STATUS, saveLoginStatus(query))
 }

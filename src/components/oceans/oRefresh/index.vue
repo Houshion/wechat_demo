@@ -27,7 +27,7 @@ export default {
         onRefresh() {
             // this.$emit("refresh")
             setTimeout(() => {
-                this.$toast('刷新成功');
+                this.toast('刷新成功');
                 this.isLoading = false
             }, 500);
         },

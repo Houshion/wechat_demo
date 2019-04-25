@@ -30,7 +30,7 @@ export default {
       form: {
         api_name: "orderList",
         page: 1,
-        pagesize: 10
+        pagesize: 20,
       },
     };
   },
@@ -48,16 +48,16 @@ export default {
       const _this = this;
       this.form.page = page
       this.axios.post("/wxsite/user/api", this.form).then(res => {
-        _this.$hideLoading()
+        _this.hideLoading()
         // _this.$refs.oOrderList.finished = true
         // _this.$refs.oOrderList.loading = false
         if (res.code == 1) {
           _this.orderList = [..._this.orderList, ...res.data.list]
-          if (res.data.list.length < 10) {
+          if (res.data.list.length < 20) {
             _this.$refs.oOrderList.finished = true
           }
         } else {
-          _this.$toast(res.msg)
+          _this.toast(res.msg)
         }
       });
     },

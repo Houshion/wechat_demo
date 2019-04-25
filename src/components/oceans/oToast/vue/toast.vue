@@ -33,5 +33,6 @@ export default {
   line-height: 30px;
   max-width: 60%;
   word-wrap: break-word;
+  z-index: 99999;
 }
 </style>  

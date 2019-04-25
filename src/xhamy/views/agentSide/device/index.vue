@@ -37,6 +37,7 @@ export default {
       form: {
         api_name: "my_device",
         page: 0,
+        pagesize: 20,
         token: this.base.getItem("agentToken")
       }
     };
@@ -47,6 +48,9 @@ export default {
 
   created() {
     const _this = this;
+
+    console.log(this.$refs);
+
     this.init()
   },
 
@@ -60,18 +64,18 @@ export default {
     },
     refresh() {
       setTimeout(() => {
-        this.$toast('刷新成功');
         this.$refs.reFresh.isLoading = false
+        this.toast('刷新成功');
       }, 500);
     },
     init() {
       const _this = this
       this.form.page++
       this.axios.post("/wxsite/agent/api", this.form).then(res => {
-        _this.$hideLoading();
-        if (res.code != 1) return _this.$toast(res.msg)
+        _this.hideLoading();
+        if (res.code != 1) return _this.toast(res.msg)
         _this.list = [..._this.list, ...res.data];
-        if (res.data.length < 10) {
+        if (res.data.length < 20) {
           setTimeout(() => {
             this.$refs.reFresh.finished = true
             this.$refs.reFresh.loading = false

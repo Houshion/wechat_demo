@@ -43,8 +43,8 @@ export default {
     const _this = this;
     _this.orderDetail.no = 1;
     this.axios.post("/wxsite/agent/api", this.form).then(res => {
-      _this.$hideLoading()
-      if (res.code != 1) return _this.$toast(res.msg)
+      _this.hideLoading()
+      if (res.code != 1) return _this.toast(res.msg)
       _this.orderDetail = res.data
     })
   },

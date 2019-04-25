@@ -1,7 +1,7 @@
 <template>
   <div id="login">
     <!-- <m-login :logo="logo" :boxMsg="boxMsg" @login="login"></m-login> -->
-    <o-login :logo="logo" :boxMsg="boxMsg" @login="login"></o-login>
+    <o-login :logo="logo" :boxMsg="boxMsg" @login="login" ref="login"></o-login>
   </div>
 </template>
 
@@ -14,13 +14,13 @@ export default {
       logo: require("@/xhamy/img/logo.jpg"),
       boxMsg: {
         username: {
-          placeholder: "请输入用户名",
+          placeholder: "请输入登录账号",
           // label: "账号",
           icon: require('@/xhamy/img/icon_current.png'),
           value: null
         },
         password: {
-          placeholder: "请输入密码",
+          placeholder: "请输入登录密码",
           // label: "密码",
           icon: require('@/xhamy/img/icon_lock.png'),
           value: null
@@ -57,15 +57,16 @@ export default {
       this.form.account = val.username.value
       this.form.password = val.password.value
       this.axios.post("/wxsite/agent/api", this.form).then(res => {
-        _this.$hideLoading();
-        _this.$toast(res.msg);
-        if (res.code == 1)
-          _this.base.setItem("agentToken",res.data.token)
+        _this.hideLoading();
+        _this.toast(res.msg);
+        if (res.code == 1) {
+          _this.base.setItem("agentToken", res.data.token)
           setTimeout(() => {
             _this.$router.replace({
               name: 'agent/agentCenter'
             })
           }, 1500);
+        }
       })
     }
   }

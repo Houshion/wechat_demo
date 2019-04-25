@@ -8,11 +8,11 @@
         </div>
         <div class="tal dateTime">{{item.dateTime}}</div>
         <div slot="right-icon">
-          <o-button v-if="item.state==0">取消预约</o-button>
-          <o-button v-else color="cmain">已使用</o-button>
+          <o-button @btnClick="cancelBtn(item.subscribe_id)">取消预约</o-button>
         </div>
       </van-cell>
     </div>
+    <no-data v-if="data.length<=0"></no-data>
   </div>
 </template>
 
@@ -21,10 +21,11 @@ export default {
   name: "bookingOrder",
   data() {
     return {
-      data: [
-        { id: 1, macno: 201903010001, dateTime: "2019-03-01", state: 0 },
-        { id: 2, macno: 201903010002, dateTime: "2019-03-01", state: 1 }
-      ]
+      data: [],
+      form: {
+        api_name: "cancel_subscribe",
+        subscribe_id: 0
+      }
     };
   },
 
@@ -32,12 +33,42 @@ export default {
 
   created() {
     const _this = this;
+    this.init()
   },
 
   mounted() {
     const _this = this;
   },
-  methods: {}
+  methods: {
+    cancelBtn(id) {
+      const _this = this
+      this.confirm({
+        title: "注意", // 标题
+        content: "确定取消吗？", // 内容
+        leftBtn: "再想想", // 左边按钮
+        confirm: () => {
+          // 又按钮事件
+          this.form.subscribe_id = id
+          this.axios.post("/wxsite/user/api", this.form).then(res => {
+            _this.hideLoading();
+            if (res.code != 1) return _this.toast(res.msg)
+            _this.init()
+          })
+        },
+        cancel: () => {
+          // 左按钮事件
+        }
+      });
+    },
+    init() {
+      const _this = this
+      this.axios.post("/wxsite/user/api", { api_name: "subscribe_order" }).then(res => {
+        _this.hideLoading();
+        if (res.code != 1) return _this.toast(res.msg)
+        _this.data = res.data.list
+      })
+    }
+  }
 };
 </script>
 <style lang='less' scoped>

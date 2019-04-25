@@ -1,6 +1,8 @@
 import axios from 'axios'
 import qs from 'qs'
-import { baseUrl } from "@/config.js";
+import {
+  baseUrl
+} from "@/config.js";
 import {
   oShowLoading,
   oHideLoading
@@ -41,8 +43,7 @@ const Http = {
   post: (url, query, config) => new Promise((resolve, reject) => {
     /* new Promise 是为进行在vue store里面进行异步传值 */
     var path = getUrl(url)
-    // process.env.NODE_ENV === "development" ? query.token = window.localStorage.getItem("token") : ''
-    // query.token = window.localStorage.getItem("token")
+    process.env.NODE_ENV === "development" ? query.token = window.localStorage.getItem("token") : ''
     /* post请求 */
     oShowLoading()
     axios({

@@ -7,18 +7,19 @@
         </div>
       </van-field>
     </div>
-    <o-reporting :question="question" :macno="macno"></o-reporting>
+    <o-reporting :question="question" :macno="macno" @submit="submit"></o-reporting>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 import oReporting from "./components/";
 export default {
   name: "reporting",
   components: { oReporting },
   data() {
     return {
-      macno: this.tool.macno,
+      macno: '',
       question: [
         // { name: "二维码", id: 1, status: false },
         // { name: "二维码", id: 2, status: false },
@@ -52,8 +53,7 @@ export default {
     getErrorType() {
       const _this = this;
       this.axios.post("/wxsite/user/api", { api_name: "get_fault_type" }).then(res => {
-        console.log(res)
-        _this.$hideLoading()
+        _this.hideLoading()
         if (res.code == 1) {
           res.data.forEach((item, index) => {
             let statusParam = Object.assign({}, item, {
@@ -62,13 +62,49 @@ export default {
             _this.$set(_this.question, index, statusParam);
           });
         } else {
-          _this.$toast(res.msg)
+          _this.toast(res.msg)
         }
       })
     },
     scan() {
-      console.log(123);
+      const _this = this;
+      _this.wechat.getWx(() => {
+        _this.wechat.scan(1, res => {
+          _this.hideLoading()
+          _this.macno = res.resultStr.split("macno=")[1]
+        })
+      })
     },
+    submit(form, type) {
+      const _this = this;
+      if (type == 1) {
+        // this.form.macno = this.macno
+        // console.log(form, this.macno)
+        axios.post("http://bjxhamy.app.xiaozhuschool.com/wxsite/user/api", form, {
+          headers: { "Content-Type": "multipart/form-data" }
+        }).then(res => {
+          _this.hideLoading();
+          _this.toast(res.data.msg)
+          if (res.data.code != 1) return false;
+          setTimeout(() => {
+            _this.$router.replace({
+              name: 'centerInfo'
+            })
+          }, 1500);
+        });
+      } else {
+        this.axios.post('/wxsite/user/api', form).then(res => {
+          _this.hideLoading();
+          _this.toast(res.msg)
+          if (res.code != 1) return false
+          setTimeout(() => {
+            _this.$router.replace({
+              name: 'centerInfo'
+            })
+          }, 1500);
+        })
+      }
+    }
   }
 };
 </script>

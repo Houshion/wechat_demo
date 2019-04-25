@@ -2,7 +2,7 @@
   <div id="oLogin">
     <div class="headerImg pd-tb-35">
       <div class="img box mg-auto bfff">
-        <img :src="logo" alt>
+        <img :src="logo" alt="">
       </div>
     </div>
     <div class="loginBox pd-15">
@@ -45,7 +45,7 @@ export default {
         username: {
           placeholder: {
             type: String,
-            default: "请输入用户名"
+            default: "请输入登录账号"
           },
           error: "用户名错误",
           icon: null,
@@ -53,7 +53,7 @@ export default {
           value: null
         },
         password: {
-          placeholder: "请输入密码",
+          placeholder: "请输入登录密码",
           error: "密码错误",
           icon: null,
           label: null,

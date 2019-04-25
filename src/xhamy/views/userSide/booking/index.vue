@@ -37,7 +37,8 @@
         ></o-picker>-->
       </div>
     </div>
-    <o-seat :col="8" :seatData="seatData" class="boxShadow radius10" @getCall="getId"></o-seat>
+    <!-- <o-seat ref="oseat" :col="8" :seatData="seatData" class="boxShadow radius10" @getCall="getId"></o-seat> -->
+    <o-seat ref="oseat" :col="8" class="boxShadow radius10" @getCall="getId"></o-seat>
     <o-button class="wd-80 radius10 mg-t-50" @btnClick="submitBooking">确认预约</o-button>
   </div>
 </template>
@@ -97,24 +98,21 @@ export default {
         token: this.tool.token,
         site_id: this.tool.deviceMsg.site_id
       }).then(res => {
+        _this.hideLoading()
         if (res.code == 1) {
-          _this.seatData = res.data.list
-          _this.seatData.forEach((item, index) => {
-            let select = Object.assign({}, item, {
-              selected: item.status == 1 ? false : true
-            });
-            _this.$set(_this.seatData, index, select);
-          });
-          _this.seatData = res.data.list
+          // _this.seatData = res.data.list
+          _this.$refs.oseat.changeData(res.data.list)
         }
       });
     },
     submitBooking() {
+      const _this = this
       if (this.form.device_id == 0) {
-        return this.$toast("请选择设备")
+        return this.toast("请选择设备")
       }
       this.axios.post("/wxsite/auth/subscribe", this.form).then(res => {
-        this.$toast(res.msg)
+        _this.hideLoading()
+        _this.toast(res.msg)
         if (res.code == 1) {
           setTimeout(() => {
             WeixinJSBridge.call('closeWindow')
@@ -122,8 +120,11 @@ export default {
         }
       });
     },
-    getId(id) {
+    getId(id, item) {
+      console.log(id)
       this.form.device_id = id
+      this.deviceMsg = item[0
+      ]
     }
   }
 };

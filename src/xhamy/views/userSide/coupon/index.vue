@@ -26,7 +26,7 @@ export default {
       page: 1,
       pagesize: 20
     }).then(res => {
-      _this.$hideLoading()
+      _this.hideLoading()
       res.data.forEach(item => {
         _this.couponList.push({
           id: item.id,

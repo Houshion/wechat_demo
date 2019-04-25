@@ -3,7 +3,7 @@
     <o-map :marker="mapMarker" :markerIcon="markerIcon" :center="center" ref="oMap">
       <div class="po_ab tool">
         <!-- <div class="btns flex flexBetween"> -->
-        <div class="left" @click="this.$router.go(0)">
+        <div class="left" @click="reload">
           <img src="@/xhamy/img/reload.png" alt="">
         </div>
         <div class="right">
@@ -68,8 +68,9 @@ export default {
     _this.wechat.getWx(function () {
       _this.wechat.getTmapLocation(res => {
         _this.center = res
+        _this.hideLoading()
         // alert(JSON.stringify(res))
-        // _this.$showLoading();
+        // _this.showLoading();
         _this.getSide()
       })
     })
@@ -107,6 +108,10 @@ export default {
       _this.wechat.scan(1, res => {
         console.log(res)
       })
+    },
+    reload() {
+      // 地图刷新回到中心点
+      this.$refs.oMap.mapReload();
     }
   }
 
@@ -114,7 +119,7 @@ export default {
 </script>
 <style lang='less' scope>
 @import "./style.less";
-#app {
-  height: 100%;
+#indexMap {
+  height: 100vh;
 }
 </style>

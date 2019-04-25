@@ -39,7 +39,7 @@ export default {
     init() {
       const _this = this;
       this.axios.post("/wxsite/user/api", { api_name: "user_info" }).then(res => {
-        _this.$hideLoading()
+        _this.hideLoading()
         if (res.code == 1) {
           console.log(1);
           _this.tool.userMsg = res.data
@@ -49,7 +49,7 @@ export default {
             phone: res.data.mobile
           };
         } else {
-          _this.$toast(res.msg)
+          _this.toast(res.msg)
         }
       })
     }

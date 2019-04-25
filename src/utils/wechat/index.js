@@ -3,11 +3,17 @@ import wechatAuth from './wechatAuth' //微信登录插件
 import router from '@/xhamy/router'
 import store from '@/store'
 
-import { wechatAppid } from '@/config.js'
+import {
+  wechatAppid,
+  wechatLogin
+} from '@/config.js'
 
 import wechat from './jssdk'
 Vue.prototype.wechat = wechat;
 
+/**
+ * 引用vuex存储数据
+ */
 /* const qs = require('qs');
 router.beforeEach((to, from, next) => {
   if (store.state.loginStatus == 0) {
@@ -24,30 +30,40 @@ router.beforeEach((to, from, next) => {
       loginUrl = url
     }
     wechatAuth.redirect_uri = loginUrl
-    console.log(loginUrl)
     store.dispatch('setLoginStatus', 1)
     window.location.href = wechatAuth.authUrl
   } else if (store.state.loginStatus == 1) {
+
     try {
-      wechatAuth.returnFromWechat(to.fullPath)
+      wechatAuth.returnFromWechat(location.href)
     } catch (err) {
       store.dispatch('setLoginStatus', 0)
       next()
     }
-    store.dispatch('loginWechatAuth', wechatAuth.code).then((res) => {
-      if (res.status == 1) {
+    wechatLogin(wechatAuth.code, res => {
+      console.log(res)
+      if (res.code == 1) {
+        store.dispatch("setUserInfo", res.data)
         store.dispatch('setLoginStatus', 2)
       } else {
         store.dispatch('setLoginStatus', 0)
       }
       next()
-    }).catch((err) => {
-      next()
     })
+    // store.dispatch('loginWechatAuth', wechatAuth.code).then((res) => {
+    //   if (res.status == 1) {
+    //     store.dispatch('setLoginStatus', 2)
+    //   } else {
+    //     store.dispatch('setLoginStatus', 0)
+    //   }
+    //   next()
+    // }).catch((err) => {
+    //   next()
+    // })
   } else {
     next()
   }
-})
-Vue.use(wechatAuth, {
-  appid: wechatAppid, // 微信公众号APPID
 }) */
+// Vue.use(wechatAuth, {
+//   appid: wechatAppid, // 微信公众号APPID
+// })

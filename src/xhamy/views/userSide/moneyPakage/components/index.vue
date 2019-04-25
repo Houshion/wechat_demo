@@ -1,19 +1,20 @@
 <template>
   <div id="moneyDetail">
-    <van-cell-group>
+    <van-cell-group v-if="moneyDetail.length>0">
       <van-cell
         class="tal boxShadow mg-b-10 radius10"
         v-for="item in moneyDetail"
         :key="item.id"
-        :title="item.name"
-        :label="item.time"
+        :title="item.remark"
+        :label="item.ctime"
       >
         <div
           class="font24 h100 flex flexEnd flexVcenter c000"
-          :class="item.state==0 ? 'plus' : 'reduce'"
-        >{{item.state==0 ? '+' : '-'}}{{item.money}}</div>
+          :class="item.type!=2 ? 'plus' : 'reduce'"
+        >{{item.type!=2 ? '+' : '-'}}{{item.money}}</div>
       </van-cell>
     </van-cell-group>
+    <no-data v-else></no-data>
   </div>
 </template>
 

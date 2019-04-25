@@ -33,6 +33,9 @@ Object.keys(filters).forEach(key => { //返回filters对象中属性名组成的
 import tools from "@/utils/tools"
 Vue.prototype.tool = tools
 
+// 引入keyCode相应事件
+import "@/utils/keyEvent" // 未完成...
+
 // 引入微信登录授权
 import "@/utils/wechat"
 

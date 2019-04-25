@@ -8,7 +8,7 @@
       <div class="c999 mg-l-30 pd-tb-15">{{orderMsg.name+" （"+orderMsg.rule+"）"}}</div>
       <div class="tac font24">
         ￥
-        <span class="price">{{orderMsg.money | toFixed(2)}}</span>
+        <span class="price">{{orderMsg.price | toFixed(2)}}</span>
       </div>
     </div>
     <div class="boxShadow radius5 pd-15 tal tcMsg" v-else>
@@ -38,7 +38,7 @@ export default {
   name: "confirmOrder",
   data() {
     return {
-      orderMsg: this.tool.xhamy.orderTc, // 订单信息
+      orderMsg: this.tool.xhamy.orderTc ? this.tool.xhamy.orderTc : {}, // 订单信息
       // 支付方式
       payWay: payWay,
       radio: 0,
@@ -47,7 +47,7 @@ export default {
         // api_name: "pay_order",
         // macno: this.tool.macno, //设备编号
         // item_id: this.$route.query.id, // 套餐id
-        coupon_id: this.base.getItem("couponMsg") ? this.base.getItem("couponMsg").id : '', // 优惠券id
+        coupon_id: this.tool.couponMsg ? this.tool.couponMsg.id : '', // 优惠券id
         pay_type: 2, //支付方式 1：余额 2：微信支付
       },
       // 先支付接口地址
@@ -60,68 +60,78 @@ export default {
       },
       type: this.$route.query.type, // 确认订单类型，1：先付款，2：后付款
       time: this.$route.query.time ? this.$route.query.time : 0, //使用时长，单位秒
-      couponMsg: null // 选中的优惠券信息
+      couponMsg: null, // 选中的优惠券信息
+      afterPrice: 0,
+      interval: null
     };
   },
 
   created() {
     const _this = this;
-    this.tool.xhamy.getUser()
+    this.tool.xhamy.getUser()// 获取个人用户信息，socket需要用户id
     if (this.$route.query.order_id) {
+      // 如果url带订单ID参数，则查询订单信息，此为后付款所需信息
       this.tool.xhamy.getOrder(this.$route.query.order_id, res => {
         this.orderMsg = res;
         this.time = res.useSecond
       })
     }
     if (this.base.getItem("couponMsg")) {
-      this.couponMsg = JSON.parse(this.base.getItem("couponMsg"))
+      // 获取优惠券信息
+      this.couponMsg = this.tool.couponMsg
+    }
+    if (this.type == 2) {
+      // 若为后支付流程，则直接查询相应价格，
+      this.checkMoney()
+      this.interval = setInterval(() => {
+        this.checkMoney()
+      }, 30000);
     }
   },
 
   mounted() {
     const _this = this;
     // 此处判断设备类型，type==1为先支付类设备，需连接websocet获取数据
-    this.socket()
+    setTimeout(() => {
+      this.socket()
+    }, 1000);
     // this.$route.query.type == 1 ? this.socket() : '';
   },
   computed: {
+    // 自动计算总金额
     total() {
       let total;
       // if (this.type == 1) {
-      total = this.orderMsg.money - (this.couponMsg ? this.couponMsg.price : 0)
+      total = (this.orderMsg.price ? this.orderMsg.price : this.afterPrice) - (this.couponMsg ? this.couponMsg.price : 0)
       if (total < 0) {
         total = 0
       }
-      // } else {
-      //   console.log(this.orderMsg)
-      //   total = this.orderMsg.money - (this.couponMsg ? this.couponMsg.price : 0)
-      //   if (total < 0) {
-      //     total = 0
-      //   }
-      // }
       return total
     }
   },
+  watch: {
+
+  },
   methods: {
     socket() {
+      // websocket相关事件
       const _this = this;
       _this.base.socket("connectinfo_beck_bjxhamy_" + _this.tool.userMsg.user_id, res => {
-        console.log(res);
         let data
         if (this.type == 1) {
           data = JSON.parse(res.data.data)
         } else {
           data = JSON.parse(res.data)
         }
-        console.log(data)
-        // _this.$toast(data.message)
-        _this.$hideLoading()
+        // _this.toast(data.message)
+        _this.hideLoading()
         if (res.code == 1 && data.status == 1) {
           if (_this.form.pay_type == 2) {
+            // 后付款流程微信支付
             _this.payOrder(data.order_id)
           } else {
-            _this.tool.successPay() // 完成支付后清除订单信息及优惠券信息
-            _this.$toast(data.message)
+            _this.tool.xhamy.successPay() // 完成支付后清除订单信息及优惠券信息
+            _this.toast(data.message)
             setTimeout(() => {
               _this.$router.replace({
                 name: "using",
@@ -134,44 +144,74 @@ export default {
         }
       })
     },
+    checkMoney() {
+      // 获取后支付流程该订单金额
+      const _this = this;
+      this.axios.post('/wxsite/auth/order2Info', {}).then(res => {
+        _this.hideLoading();
+        if (res.code != 1) return _this.toast(res.msg)
+        _this.afterPrice = res.data.money
+      })
+    },
     payNow() {
+      // 支付事件
       const _this = this;
       let url;
       if (this.type == 1) {
+        // 先支付流程，下方为先支付接口所需参数
         url = this.payFirst.url;
         this.form.api_name = "pay_order";
         this.form.macno = this.tool.macno;
-        this.form.item_id = this.id;
+        this.form.item_id = this.$route.query.id;
       } else {
+        // 后支付流程
         url = this.payAfter.url
       }
-      this.$showLoading()
+      if (this.total <= 0) {
+        // 判断支付金额是否大于零,否则视为余额支付
+        this.form.pay_type = 1
+      }
+      // return console.log(this.form)
       this.axios.post(url, this.form).then(res => {
+        if (_this.form.pay_type == 1) _this.hideLoading()
         if (res.code == 1) {
-          if (_this.form.pay_type == 1 || _this.total == 0) {
-            // _this.$xToast("success", res.msg)
-            _this.tool.successPay() // 完成支付后清除订单信息及优惠券信息
+          if (_this.form.pay_type == 1) {
+            // 余额支付
+            _this.toast("支付成功");
+            _this.tool.xhamy.successPay() // 完成支付后清除订单信息及优惠券信息
+            if (_this.type == 2) {
+              // 后支付，此处直接关闭 
+              setTimeout(() => {
+                _this.wechat.close()
+              }, 1500);
+            }
           } else {
+            // 微信支付
             if (this.type == 2) {
-              _this.wechat.callpay(res.data.params, res => {
+              // 后付款流程的微信支付
+              _this.wechat.callpay(res.data.params, res => {// 调取微信支付方法
+                _this.hideLoading()
                 if (res) {
-                  _this.tool.successPay() // 完成支付后清除订单信息及优惠券信息
-                  _this.wechat.close()
+                  _this.tool.xhamy.successPay() // 完成支付后清除订单信息及优惠券信息
+                  _this.toast("支付成功");
+                  setTimeout(() => {
+                    // 后支付，此处直接关闭 
+                    _this.wechat.close()
+                  }, 1500);
                 } else {
-                  _this.$toast("支付失败")
+                  _this.toast("支付失败")
                 }
               })
             }
           }
-          // setTimeout(() => {
-          //   _this.wechat.close()
-          // }, 2000);
         } else {
-          _this.$toast(res.msg)
+          _this.hideLoading()
+          _this.toast(res.msg)
         }
       });
     },
     getVal(index) {
+      // 获取支付类型
       const _this = this;
       switch (index) {
         case 0:
@@ -189,11 +229,12 @@ export default {
     payOrder(orderId) {
       const _this = this;
       this.axios.post("/wxsite/auth/pay_order", { order_id: orderId }).then(res => {
-        _this.$hideLoading();
+        // 先付款调起微信支付
+        _this.hideLoading();
         if (res.code == 1) {
           _this.wechat.callpay(res.data.params, res => {
             if (res) {
-              _this.tool.successPay() // 完成支付后清除订单信息及优惠券信息
+              _this.tool.xhamy.successPay() // 完成支付后清除订单信息及优惠券信息
               _this.$router.replace({
                 name: "using",
                 query: {
@@ -201,11 +242,11 @@ export default {
                 }
               })
             } else {
-              _this.$toast("支付失败")
+              _this.toast("支付失败")
             }
           })
         } else {
-          _this.$toast(res.msg)
+          _this.toast(res.msg)
         }
       })
     }

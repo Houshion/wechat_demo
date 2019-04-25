@@ -7,13 +7,13 @@
         :key="index"
         @click="change('tp',item.id)"
       >{{item.name}}</van-button>
-      <o-button
+      <van-button
         class="modeItem mg-t-10 cccc radius5"
         v-for="(item,index) in modeData"
         :key="index"
-        @btnClick="change('md',item.id)"
+        @click="change('md',item.id)"
         :color="item.status?'':'cmain'"
-      >{{item.name}}</o-button>
+      >{{item.name}}</van-button>
     </div>
     <div class="countTime boxShadow mg-t-15 radius" v-if="complete">
       <o-count-time ref="countTimes" class="mg-auto pd-20" :time="time" :start="start"></o-count-time>
@@ -37,17 +37,20 @@ export default {
         { name: "全身按摩", id: 1 },
         { name: "舒适按摩", id: 2 },
         { name: "颈部按摩", id: 3 },
-        { name: "睡眠模式", id: 4 },
-        { name: "背部按摩", id: 5 },
-        { name: "复位按键", id: 6 },
-        { name: "靠背降", id: 7 },
-        { name: "靠背关", id: 8 },
-        { name: "靠背升", id: 9 },
+        { name: "背部按摩", id: 4 },
+        { name: "睡眠模式", id: 5 },
       ],
       modeData: [
-        { name: "座椅通风", status: false, id: 1 },
-        { name: "座椅加热", status: false, id: 2 },
-        { name: "充电控制", status: false, id: 3 },
+        { name: "按摩椅复位", id: 1 },
+        { name: "通风开", id: 2 },
+        { name: "通风关", id: 3 },
+        { name: "加热开", id: 4 },
+        { name: "加热关", id: 5 },
+        { name: "充电控制开", id: 6 },
+        { name: "充电控制关", id: 7 },
+        { name: "靠背升", id: 8 },
+        { name: "靠背降", id: 9 },
+        { name: "升降停止", id: 10 },
       ],
       complete: this.$route.query.start ? false : true,
       // complete: true,
@@ -83,8 +86,8 @@ export default {
           mode: id,
         }
         this.axios.post(url, form).then(res => {
-          _this.$hideLoading()
-          _this.$toast(res.msg)
+          _this.hideLoading()
+          _this.toast(res.msg)
           // if (res.code == 1) {
           if (type == "md") {
             _this.modeData.forEach(item => {
@@ -101,7 +104,7 @@ export default {
     check(call) {
       const _this = this;
       this.axios.post("/wxsite/device/detectionInterval", { macno: this.tool.macno }).then(res => {
-        _this.$hideLoading();
+        _this.hideLoading();
         if (res.code == 1) {
           if (res.data.hint != 0) {
             _this.$dialog({
@@ -121,6 +124,7 @@ export default {
     },
     // 结束或停止使用
     op(type) {
+      const _this = this;
       if (type == 3) {
         return this.$router.push({
           name: "confirmOrder",
@@ -135,13 +139,13 @@ export default {
         macno: this.tool.macno,
         mode: type
       }).then(res => {
-
+        _this.hideLoading()
       });
     },
     // 初始化
     init() {
       const _this = this;
-      this.$showLoading("电脑启动中，请稍候...")
+      this.showLoading("电脑启动中，请稍候...")
       if (!_this.complete) { //电脑未启动，需启动电脑
         _this.axios.post("/wxsite/auth/startDevice", { order_id: _this.$route.query.order_id }).then(res => {
           // if (res.code == 1) {
@@ -149,11 +153,11 @@ export default {
           _this.start = true
           _this.getDetail();
           // } else {
-          //   _this.$toast(res.msg)
+          //   _this.toast(res.msg)
           // }
         })
       } else { //电脑已启动，调取订单详情获取使用时长
-        _this.$hideLoading()
+        _this.hideLoading()
       }
     },
     getDetail() {
@@ -162,7 +166,7 @@ export default {
         api_name: 'order_info',
         order_id: this.$route.query.order_id,
       }).then(res => {
-        _this.$hideLoading()
+        _this.hideLoading()
         this.$refs.countTimes.cTime = res.data.useSecond
       })
     }

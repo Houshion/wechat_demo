@@ -3,6 +3,9 @@
  * @param time 2018-11-11
  * @param memo 微信授权
  */
+
+import base from "@/utils/o_base.js"
+
 const qs = require('qs')
 //应用授权作用域，snsapi_base （不弹出授权页面，直接跳转，只能获取用户openid），snsapi_userinfo （弹出授权页面，可通过openid拿到昵称、性别、所在地。并且，即使在未关注的情况下，只要用户授权，也能获取其信息）
 const SCOPES = ['snsapi_base', 'snsapi_userinfo']
@@ -78,7 +81,7 @@ class VueWechatAuthPlugin {
       if (this.state === null) {
         throw '已经设置了state'
       }
-      if (parsedUrl.state === this.state) {
+      if (parsedUrl.state.split('#')[0] === this.state) {
         this.state = null
         this._code = parsedUrl.code
       } else {
@@ -90,6 +93,7 @@ class VueWechatAuthPlugin {
 
   get code() {
     if (this._code === null) {
+      console.log("无法获取code!")
       throw '无法获取code!'
     }
     // console.log(this)

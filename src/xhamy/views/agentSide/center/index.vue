@@ -42,7 +42,6 @@
 <script>
 import { baseUrl } from "@/config.js";
 import { data } from "./script"
-import test from "~xh/config/tools.js"
 export default {
   name: "agentCenter",
   data() {
@@ -76,11 +75,11 @@ export default {
         api_name: "get_operate_data",
         token: this.base.getItem("agentToken")
       }).then(res => {
-        _this.$hideLoading();
-        if (res.code != 1) return _this.$toast(res.msg)
+        _this.hideLoading();
+        if (res.code != 1) return _this.toast(res.msg)
         _this.accountData = res.data
       })
-    }
+    },
   }
 };
 </script>

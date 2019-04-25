@@ -1,0 +1,23 @@
+#chooseType .modeItem,
+#chooseType .typeItem {
+  width: 31%;
+  margin-right: 3%;
+}
+#chooseType .modeItem:nth-child(3n),
+#chooseType .typeItem:nth-child(3n) {
+  margin-right: 0;
+}
+#chooseType .modeItem:nth-child(1),
+#chooseType .modeItem:nth-child(2),
+#chooseType .modeItem:nth-child(3),
+#chooseType .typeItem:nth-child(1),
+#chooseType .typeItem:nth-child(2),
+#chooseType .typeItem:nth-child(3) {
+  margin-top: 0;
+}
+#chooseType .countTime .bottom img {
+  width: 100%;
+  display: block;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}

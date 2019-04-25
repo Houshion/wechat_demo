@@ -1,6 +1,8 @@
 import axios from "./axios";
 import wx from "weixin-js-sdk";
-import { oToast } from '@/components/oceans/oToast/index.js'
+import {
+  oToast
+} from '@/components/oceans/oToast/index.js'
 // import "./jsSHA.js";
 var ws;
 export default {
@@ -88,7 +90,7 @@ export default {
   /**
    * @param name cookie名称
    * @param value cookie值
-   * @param iDay cookie的时间
+   * @param iDay cookie的时间，单位（天）
    */
   // 设置cookie
   setCookie(name, value, iDay) {
@@ -126,8 +128,8 @@ export default {
     var year = time.getFullYear();
     var month =
       time.getMonth() + 1 < 10 ?
-        "0" + (time.getMonth() + 1) :
-        time.getMonth() + 1;
+      "0" + (time.getMonth() + 1) :
+      time.getMonth() + 1;
     var date = time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
     var hour = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
     var minute =
@@ -194,7 +196,10 @@ export default {
         }, 30000);
       };
       ws.onmessage = function (res) {
-        cb({ code: 1, data: res });
+        cb({
+          code: 1,
+          data: res
+        });
         clearInterval(interval)
       };
 
@@ -235,7 +240,9 @@ export default {
     };
 
     // 添加请求头
-    let config = { "Content-Type": "multipart/form-data" };
+    let config = {
+      "Content-Type": "multipart/form-data"
+    };
 
     axios
       .post(
@@ -247,4 +254,35 @@ export default {
         call(res)
       });
   },
+
+  getUrl(name, explode, url) {
+    var param = window.location.search.substr(1);
+    if (url) {
+      if (explode) {
+        param = url.substr(url.indexOf(explode) + 1);
+      } else {
+        param = url.substr(url.indexOf('?') + 1);
+      }
+    } else {
+      if (explode) {
+        param = window.location.href.substr(window.location.href.indexOf(explode) + 1);
+      }
+    }
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    var r = param.match(reg);
+    if (r != null) return unescape(r[2]);
+    return null;
+  },
+
+  getUrlParms(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null)
+      return unescape(r[2]);
+    return null;
+  },
+
+  enter() {
+    console.log("欧少提示：你点击了enter")
+  }
 }

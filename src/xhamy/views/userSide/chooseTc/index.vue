@@ -60,16 +60,18 @@ export default {
       this.axios.post("/Wxsite/home/index", {
         api_name: "item_banner"
       }).then(res => {
+        _this.hideLoading()
         if (res.code == 1) {
           // _this.images = res.data
         } else {
-          _this.$toast(res.msg)
+          _this.toast(res.msg)
         }
       });
     },
     getTc() {
       const _this = this;
       this.axios.post("/Wxsite/Device/api", this.form).then(res => {
+        _this.hideLoading()
         if (res.code == 1) {
           _this.deviceTc = res.data
           _this.deviceTc.forEach((item, index) => {
@@ -79,7 +81,7 @@ export default {
             _this.$set(_this.deviceTc, index, select);
           });
         } else {
-          _this.$toast(res.msg)
+          _this.toast(res.msg)
           setTimeout(() => {
             _this.$router.push({ name: "/" })
           }, 2000);
@@ -96,13 +98,13 @@ export default {
         name: this.deviceTc[i].name,
         rule: this.deviceTc[i].price + '元/' + this.deviceTc[i].minute + '分钟',
         time: this.deviceTc[i].minute,
-        money: this.deviceTc[i].price,
+        price: this.deviceTc[i].price,
       }
 
       this.tool.xhamy.orderTc = this.orderTc;
     },
     confirm() {
-      if (this.item_id == 0) return this.$toast("请选择套餐")
+      if (this.item_id == 0) return this.toast("请选择套餐")
       this.$router.push({
         name: "confirmOrder",
         query: {

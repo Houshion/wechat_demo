@@ -10,7 +10,7 @@
         <van-field
           clearable
           v-model="boxMsg.username.value"
-          placeholder="请输入用户名"
+          :placeholder="boxMsg.username.placeholder"
           :label="boxMsg.username.label"
           :error-message="error.user"
         >
@@ -26,7 +26,7 @@
           v-model="boxMsg.sms.value"
           left
           clearable
-          placeholder="请输入短信验证码"
+          :placeholder="boxMsg.sms.placeholder"
           :label="boxMsg.sms.label"
         >
           <van-icon
@@ -42,7 +42,7 @@
           clearable
           :type="passShow?'text':'password'"
           v-model="boxMsg.password.value"
-          placeholder="请输入密码"
+          :placeholder="boxMsg.password.placeholder"
           :label="boxMsg.password.label"
           :error-message="error.pass"
           @click-right-icon="passShow = !passShow;"
@@ -76,7 +76,7 @@ export default {
         username: {
           placeholder: {
             type: String,
-            default: "请输入用户名"
+            default: "请输入登录账号"
           },
           error: "用户名错误",
           icon: null,
@@ -84,7 +84,7 @@ export default {
           value: null
         },
         password: {
-          placeholder: "请输入密码",
+          placeholder: "请输入登录密码",
           error: "密码错误",
           icon: null,
           label: null,

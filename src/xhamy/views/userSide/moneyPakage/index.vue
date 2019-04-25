@@ -18,35 +18,13 @@
 </template>
 
 <script>
-import moneyDetail from "./components/";
+import moneyDetail from "./components";
 export default {
   name: "moneyPakage",
   data() {
     return {
       money: 0,
-      data: [
-        {
-          id: 1,
-          name: "充值",
-          time: "2019-02-20 10:00",
-          state: "0",
-          money: 10
-        },
-        {
-          id: 2,
-          name: "充值",
-          time: "2019-02-20 10:00",
-          state: "0",
-          money: 10
-        },
-        {
-          id: 3,
-          name: "使用设备",
-          time: "2019-02-20 10:00",
-          state: "1",
-          money: 10
-        }
-      ]
+      data: []
     };
   },
 
@@ -61,9 +39,9 @@ export default {
     this.money = this.tool.userMsg.money
 
     this.axios.post("/wxsite/user/api", { api_name: "consumptionLog" }).then(res => {
-      _this.$hideLoading();
-      if (res.code != 1) return _this.$toast(res.msg)
-      _this.data = res.data
+      _this.hideLoading();
+      if (res.code != 1) return _this.toast(res.msg)
+      _this.data = res.data.list
     })
   },
 

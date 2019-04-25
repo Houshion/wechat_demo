@@ -16,9 +16,25 @@ import {
   Field,
   Uploader,
   List,
-  PullRefresh
+  PullRefresh,
+  Search,
+  Badge,
+  BadgeGroup,
+  Card,
+  Stepper,
+  SubmitBar,
+  NavBar,
+  Checkbox,
+  CheckboxGroup,
+  AddressList,
+  AddressEdit,
+  SwitchCell,
+  Area,
+  GoodsAction,
+  GoodsActionBigBtn,
+  GoodsActionMiniBtn
 }
-  from 'vant';
+from 'vant';
 import 'vant/lib/index.css';
 Vue
   .use(Popup)
@@ -38,3 +54,19 @@ Vue
   .use(Uploader)
   .use(List)
   .use(PullRefresh)
+  .use(Search)
+  .use(Badge)
+  .use(BadgeGroup)
+  .use(Card)
+  .use(Stepper)
+  .use(SubmitBar)
+  .use(NavBar)
+  .use(Checkbox)
+  .use(CheckboxGroup)
+  .use(AddressList)
+  .use(AddressEdit)
+  .use(SwitchCell)
+  .use(Area)
+  .use(GoodsAction)
+  .use(GoodsActionBigBtn)
+  .use(GoodsActionMiniBtn)

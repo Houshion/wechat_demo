@@ -5,11 +5,12 @@
       <div class="flex flexWrap flexBetween">
         <o-button
           :color="item.checked?'cmain':'#ccc'"
-          class="wd-45 mg-t-15"
+          class="mg-t-15"
+          style="width:45%"
           v-for="(item,index) in tcList"
           :key="index"
-          @btnClick="checkType(index)"
-        >￥{{item.price|toFixed(2)}}</o-button>
+          @btnClick="checkType(item)"
+        >{{item.give_money==0?"￥"+item.money:"充"+item.money+"送"+item.give_money}}</o-button>
       </div>
       <div class="pay mg-tb-15 border-b tal">
         <div class="title pd-tb-15">支付方式</div>
@@ -25,24 +26,32 @@
 </template>
 
 <script>
-import Toast from "vant";
 export default {
   name: "recharge",
   data() {
     return {
-      tcList: [
-        { price: 100, id: 1, checked: true },
-        { price: 200, id: 2, checked: false },
-        { price: 300, id: 3, checked: false },
-        { price: 400, id: 4, checked: false },
-      ]
+      tcList: [],
+      form: {
+        api_name: "recharge",
+        id: ""
+      }
     };
   },
 
-  components: { Toast },
-
   created() {
     const _this = this;
+    this.axios.post("/wxsite/home/index", { api_name: "get_money_item" }).then(res => {
+      _this.hideLoading();
+      if (res.code != 1) return _this.toast(res.msg)
+      res.data.forEach((item, index) => {
+        let checked = Object.assign({}, item, {
+          checked: false
+        });
+        _this.$set(res.data, index, checked);
+      });
+      _this.tcList = res.data
+      console.log(_this.tcList)
+    })
   },
 
   mounted() {
@@ -50,15 +59,28 @@ export default {
   },
   methods: {
     pay() {
-      Toast("提示内容");
+      const _this = this
+      this.axios.post("/wxsite/user/api", this.form).then(res => {
+        _this.hideLoading();
+        if (res.code != 1) return _this.toast(res.msg)
+        _this.wechat.callpay(res.data, res => {
+          console.log(res)
+          if (res) {
+            _this.toast("支付成功")
+          }
+        })
+      })
+      console.log(this.form)
     },
-    checkType(index) {
+    checkType(item) {
       const _this = this;
       console.log()
       _this.tcList.forEach(item => {
         item.checked = false;
       });
-      _this.tcList[index].checked = true;
+      item.checked = true
+      _this.form.id = item.option_id
+      // _this.tcList[index].checked = true;
     }
   }
 };

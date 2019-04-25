@@ -6,7 +6,8 @@
         v-model="item.val"
         :placeholder="'请输入'+item.title"
         input-align="right"
-        :required="item.isNull"
+        :required="!item.isNull"
+        :onkeyup="item.key?item.key:''"
         clearable
         :type="item.type?item.type:'text'"
       />

@@ -19,7 +19,13 @@
       </div>
     </div>
     <div class="seat flex flexBetween">
-      <div class="flexItem" :style="style" v-for="(item,index) in seatData" :key="index">
+      <div
+        class="flexItem"
+        :style="style"
+        v-for="(item,index) in seatData"
+        :key="index"
+        :data-base="item.selected"
+      >
         <img src="@/xhamy/img/seat1.png" v-if="item.selected">
         <img src="@/xhamy/img/seat2.png" @click="selectSeat(index)" v-else>
       </div>
@@ -35,11 +41,12 @@ export default {
       type: Number,
       default: 8
     },
-    seatData: Array
+    // seatData: Array
   },
   data() {
     return {
-      style: "width:" + 100 / this.col + "%"
+      style: "width:" + 100 / this.col + "%",
+      seatData: null
     };
   },
 
@@ -49,22 +56,28 @@ export default {
 
   created() {
     const _this = this;
+
   },
 
   mounted() {
     const _this = this;
   },
   methods: {
+    changeData(data) {
+      data.forEach((item, index) => {
+        let select = Object.assign({}, item, {
+          selected: item.status == 1 ? false : true
+        });
+        this.$set(data, index, select);
+      });
+      console.log(JSON.stringify(data))
+      this.seatData = data
+    },
     selectSeat(index) {
       const _this = this;
-      _this.seatData.forEach(item => {
-        if (item.status == 1) {
-          item.selected = false
-        }
-      });
-      console.log(_this.seatData);
       _this.seatData[index].selected = !_this.seatData[index].selected;
-      this.$emit("getCall", _this.seatData[index].device_id);
+      // return console.log(JSON.stringify(_this.seatData))
+      this.$emit("getCall", _this.seatData[index].device_id, _this.seatData);
     }
   }
 };

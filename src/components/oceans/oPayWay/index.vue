@@ -7,7 +7,7 @@
         </div>
         <div>
           需支付
-          <span class="cmoney font18">{{price}}</span>
+          <span class="cmoney font18">{{price|toFixed(2)}}</span>
           元
         </div>
       </van-cell>

@@ -1412,6 +1412,9 @@ ul {
 .tar {
   text-align: right;
 }
+.twrap {
+  overflow: wrap;
+}
 /********************* 线条边框 ***********************/
 .border {
   border: solid 1px #e1e1e1 !important;

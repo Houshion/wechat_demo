@@ -1,11 +1,33 @@
 <template>
   <div id="swipeCell">
-    <van-swipe-cell :right-width="65" :on-close="onClose" @click="clickCell">
+    <!-- <van-swipe-cell
+      :right-width="65"
+      :on-close="onClose"
+      v-for="(item,index) in data"
+      :key="index"
+      class="mg-t-15 boxShadow radius10"
+      @click="clickCell(item)"
+    >
       <van-cell-group class="tal">
         <van-cell title="单元格" value="内容" size="large" label="描述信息"/>
       </van-cell-group>
       <div slot="right" class="delRightBtn">删除</div>
-    </van-swipe-cell>
+    </van-swipe-cell>-->
+    <div @click="clickCell(item)" v-for="(item,index) in data" :key="index">
+      <mt-cell-swipe
+        title="消息"
+        :label="item.content"
+        class="mg-t-15 boxShadow radius10 tal"
+        :right="[
+        {
+          content: '删除',
+          style: { background: 'red', color: '#fff' },
+          handler: () => onDelete(item)
+        }
+      ]"
+      >{{item.ctime | timeStr("Y-m-d H:i")}}</mt-cell-swipe>
+    </div>
+    <no-data v-if="data.length<=0"></no-data>
   </div>
 </template>
 
@@ -29,10 +51,11 @@ export default {
     const _this = this;
   },
   methods: {
-    onClose(clickPosition, instance) {
+    /* onClose(clickPosition, instance) {
       switch (clickPosition) {
         case "cell":
-          console.log("detail2");
+          // this.clickCell('cell')
+          instance.close();
           break;
         case "outside":
           instance.close();
@@ -47,15 +70,21 @@ export default {
           // });
           break;
       }
+    }, */
+    onDelete(res) {
+      this.$emit("onClose", res);
     },
-    clickCell() {
-      this.$emit("detail", "");
+    clickCell(res) {
+      this.$emit("detail", res);
     }
   }
 };
 </script>
 <style lang='less' scoped>
 #swipeCell {
+  a {
+    color: #000;
+  }
   .delRightBtn {
     color: #ffffff;
     font-size: 15px;

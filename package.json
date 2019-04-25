@@ -9,11 +9,11 @@
   "dependencies": {
     "axios": "^0.18.0",
     "vue": "^2.6.10",
-    "vue-router": "^3.0.1",
+    "vue-router": "^3.0.6",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
-    "@vant/icons": "^1.1.4",
+    "@vant/icons": "^1.1.5",
     "@vue/cli-plugin-babel": "^3.4.0",
     "@vue/cli-service": "^3.4.0",
     "babel-plugin-import": "^1.11.0",
@@ -21,8 +21,9 @@
     "js-cookie": "^2.2.0",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
+    "mint-ui": "^2.2.13",
     "muse-ui": "^3.0.2",
-    "vant": "^1.6.11",
+    "vant": "^1.6.15",
     "vue-template-compiler": "^2.6.10",
     "weixin-js-sdk": "^1.4.0-test"
   },

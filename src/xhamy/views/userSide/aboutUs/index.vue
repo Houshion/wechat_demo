@@ -21,8 +21,8 @@ export default {
   created() {
     const _this = this;
     this.axios.post("/wxsite/user/api", { api_name: "about_us" }).then(res => {
-      _this.$hideLoading();
-      if (res.code != 1) return _this.$toast(res.msg)
+      _this.hideLoading();
+      if (res.code != 1) return _this.toast(res.msg)
       _this.content = res.data
     })
   },

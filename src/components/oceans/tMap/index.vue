@@ -97,7 +97,7 @@ export default {
           );
         marker.setIcon(markerIcon);
       }
-      _this.$hideLoading();
+      _this.hideLoading();
     },
     setMarker() {
       const _this = this;
@@ -135,6 +135,10 @@ export default {
           item.setMap(null);
         });
       }
+    },
+    mapReload() {
+      console.log("reload")
+      this.map.panTo(new qq.maps.LatLng(this.center.lat, this.center.lng));
     }
   }
 };

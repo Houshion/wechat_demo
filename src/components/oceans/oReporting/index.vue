@@ -34,7 +34,7 @@
         <van-field v-model="message" type="textarea" placeholder="问题补充描述" rows="4" autosize/>
       </div>
       <div class="content tal">
-        <van-uploader :after-read="onRead" multiple>
+        <van-uploader :after-read="onRead">
           <van-icon name="photograph" class="updateIcon"/>
         </van-uploader>
       </div>

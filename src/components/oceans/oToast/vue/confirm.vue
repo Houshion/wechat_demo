@@ -88,7 +88,7 @@ export default {
   margin: auto;
   position: relative;
   border-radius: 15px;
-  z-index: 9;
+  z-index: 99999;
 }
 #confirm .confirmBox div {
   margin: 10px 0;
